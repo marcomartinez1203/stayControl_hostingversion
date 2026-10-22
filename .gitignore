@@ -39,3 +39,4 @@ build/
 
 # Historial conservado al reubicar la copia; no publicar como archivos.
 .git-copia-original/
+mongodb-local/

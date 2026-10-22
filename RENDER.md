@@ -1,55 +1,25 @@
-# Despliegue de StayControl en Render
+# Render con MongoDB Atlas
 
-Esta copia incluye un Dockerfile que compila Vue con Node 24, empaqueta el
-frontend dentro de Spring Boot con Java 21 y ejecuta ambos en un solo servicio.
-No necesita Vercel ni una segunda URL para la API. No ejecuta pruebas.
+Esta copia compila Vue y Spring Boot juntos mediante Docker. No necesita
+Tailscale ni MongoDB local.
 
-## Configuracion
+1. En Render selecciona el repositorio de hosting, rama main, lenguaje Docker.
+2. Root Directory vacio, Dockerfile Path ./Dockerfile, contexto . y plan Free.
+3. En Environment define MONGODB_URI y MONGODB_DATABASE=staycontrol.
+   Usa deploy/render.env.example y sustituye <db_password> por la contrasena
+   del usuario de base de datos Atlas (codifica caracteres especiales en la URI).
+4. En Atlas Network Access autoriza las direcciones de salida del servicio Render.
+5. Elimina de Render TAILSCALE_ENABLED, TS_HOSTNAME y TS_AUTHKEY si las agregaste.
+   Revoca la clave Tailscale que ya no usaras.
+6. Despliega y abre la URL HTTPS en /index.html#/login.
 
-1. Sube esta carpeta como raiz de un repositorio, sin `.env`, copias de seguridad
-   ni `.git-copia-original`. Revisa los archivos antes de hacer commit.
-2. En Render: New > Web Service > selecciona ese repositorio.
-3. Language: Docker. Plan: Free.
-4. Root Directory: vacio, si esta carpeta es la raiz del repositorio.
-5. Dockerfile Path: `./Dockerfile`. Docker Build Context: `.`.
-6. Deja Docker Command vacio: el Dockerfile ya define el arranque.
-7. Configura estas variables en Environment, no dentro del Dockerfile:
+El .env local no se publica ni se incluye en Docker. Configuralo por separado.
+El contenedor usa PORT (10000 por defecto), escucha en 0.0.0.0 y exige cookies
+seguras. No realiza pruebas ni crea usuarios predeterminados.
 
-| Variable | Valor |
-| --- | --- |
-| `TAILSCALE_ENABLED` | `true` |
-| `TS_HOSTNAME` | `staycontrol-render` |
-| `TS_AUTHKEY` | Clave secreta de incorporacion de Tailscale |
-| `MONGODB_URI` | URI privada indicada en `deploy/render.env.example`, con credenciales reales |
-| `MONGODB_DATABASE` | `staycontrol` |
+Render Free se suspende por inactividad; su memoria es limitada. La imagen aun
+requiere validacion de compilacion y conexion real en Render o con Docker local.
 
-El contenedor ya define `SERVER_ADDRESS=0.0.0.0`,
-`SESSION_COOKIE_SECURE=true` y `AUTH_BOOTSTRAP_ENABLED=false`.
-Usa el puerto `PORT` de Render, con 10000 como alternativa.
-La URI debe codificar los caracteres especiales de la contrasena cuando sea necesario.
-El archivo `.env` local no se incluye en la imagen ni se carga en Render.
+No se borraron los datos de la instancia local de preparacion.
 
-Antes de desplegar completa `deploy/TAILSCALE.md`: autorizacion privada,
-usuario de MongoDB, interfaz de escucha y firewall del PC. La direccion
-`100.96.225.102` procede de la captura del usuario; confirma que siga vigente.
-No expongas contrasenas en GitHub ni abras MongoDB directamente a Internet.
-El `.env` sigue apuntando a localhost para ejecutar esta copia en el PC;
-Render recibe una URI distinta mediante sus variables de entorno.
-
-Abre la URL HTTPS de Render en `/index.html#/login`. Las cookies requieren HTTPS.
-El servicio Free se suspende tras 15 minutos sin trafico; al volver puede tardar
-aproximadamente un minuto. La memoria disponible es limitada: si el proceso se
-queda sin memoria, revisa los logs antes de considerar un plan de pago.
-
-## Compilacion manual (requiere Docker)
-
-Desde la carpeta que contiene el Dockerfile:
-
-```sh
-docker build -t staycontrol-host .
-```
-
-No se ha publicado ningun servicio automaticamente. La validacion de la imagen
-requiere Docker o un primer build en Render.
-
-Referencias: https://render.com/docs/docker y https://render.com/docs/free
+Referencia: https://render.com/docs/docker

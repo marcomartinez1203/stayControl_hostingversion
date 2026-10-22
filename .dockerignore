@@ -11,3 +11,4 @@
 **/*.bak
 **/src/test
 **/tests
+mongodb-local/
