@@ -1,0 +1,201 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>StayControl - Reservas</title>
+
+    <link rel="preload" href="../assets/fonts/DMSans-Variable.ttf" as="font" type="font/ttf" crossorigin>
+
+    <link rel="stylesheet" href="../assets/css/reservas.css">
+    <link rel="stylesheet" href="../assets/css/negocio.css">
+    <link rel="stylesheet" href="../assets/css/experiencia.css">
+    <meta name="theme-color" content="#0f172a">
+    <link rel="manifest" href="/manifest.json">
+    <link rel="apple-touch-icon" href="/assets/icons/pwa-180.png">
+    <link rel="stylesheet" href="../assets/css/pwa.css">
+</head>
+
+<body>
+
+<div class="app">
+
+    <!-- HEADER -->
+    <header class="header">
+        <h1>Calendario y Reservas</h1>
+
+        <button class="calendar-button">
+            <svg class="ui-icon" viewBox="0 0 24 24" role="img" aria-label="Calendario" focusable="false"><use href="../assets/icons/sprite.svg#calendario"></use></svg>
+        </button>
+    </header>
+
+    <!-- CALENDARIO -->
+    <section class="calendar-strip">
+
+        <button class="day">
+            <span>Lun</span>
+            <strong>24</strong>
+        </button>
+
+        <button class="day">
+            <span>Mar</span>
+            <strong>25</strong>
+        </button>
+
+        <button class="day selected">
+            <span>Mié</span>
+            <strong>26</strong>
+        </button>
+
+        <button class="day">
+            <span>Jue</span>
+            <strong>27</strong>
+        </button>
+
+        <button class="day">
+            <span>Vie</span>
+            <strong>28</strong>
+        </button>
+
+        <button class="day">
+            <span>Sáb</span>
+            <strong>29</strong>
+        </button>
+
+    </section>
+
+    <!-- RESERVAS -->
+    <main class="reservations">
+
+        <h2>Lista de Próximas Reservas</h2>
+
+        <!-- RESERVA 1 -->
+        <article class="reservation-card">
+
+            <div class="reservation-top">
+
+                <div class="guest">
+                    <strong>Esteban Ramírez</strong>
+                    <span>26 Oct - 29 Oct</span>
+                </div>
+
+                <span class="status confirmed">
+                    CONFIRMADA
+                </span>
+
+            </div>
+
+            <div class="reservation-bottom">
+
+                <div class="assigned-room">
+                    <svg class="ui-icon" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><use href="../assets/icons/sprite.svg#habitaciones"></use></svg>
+
+                    <span>Habitación Asignada:</span>
+                    <strong>102</strong>
+                </div>
+
+            </div>
+
+        </article>
+
+        <!-- RESERVA 2 -->
+        <article class="reservation-card">
+
+            <div class="reservation-top">
+
+                <div class="guest">
+                    <strong>Laura Martínez</strong>
+                    <span>27 Oct - 02 Nov</span>
+                </div>
+
+                <span class="status pending">
+                    PENDIENTE
+                </span>
+
+            </div>
+
+            <div class="reservation-bottom">
+
+                <div class="assigned-room">
+                    <svg class="ui-icon" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><use href="../assets/icons/sprite.svg#habitaciones"></use></svg>
+
+                    <span>Habitación Asignada:</span>
+                    <strong>201</strong>
+                </div>
+
+            </div>
+
+        </article>
+
+        <!-- RESERVA 3 -->
+        <article class="reservation-card">
+
+            <div class="reservation-top">
+
+                <div class="guest">
+                    <strong>Sofía Vargas</strong>
+                    <span>25 Oct - 26 Oct</span>
+                </div>
+
+                <span class="status cancelled">
+                    CANCELADA
+                </span>
+
+            </div>
+
+            <div class="reservation-bottom">
+
+                <div class="assigned-room">
+                    <svg class="ui-icon" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><use href="../assets/icons/sprite.svg#habitaciones"></use></svg>
+
+                    <span>Habitación Asignada:</span>
+                    <strong>103</strong>
+                </div>
+
+            </div>
+
+        </article>
+
+    </main>
+
+    <!-- BOTÓN FLOTANTE -->
+    <button class="fab" id="addReservation">
+        <svg class="ui-icon" viewBox="0 0 24 24" role="img" aria-label="Agregar reserva" focusable="false"><use href="../assets/icons/sprite.svg#agregar"></use></svg>
+    </button>
+
+    <!-- NAVBAR -->
+    <nav class="bottom-nav">
+
+        <a class="nav-item">
+            <svg class="ui-icon" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><use href="../assets/icons/sprite.svg#inicio"></use></svg>
+            <span>Inicio</span>
+        </a>
+
+        <a class="nav-item">
+            <svg class="ui-icon" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><use href="../assets/icons/sprite.svg#habitaciones"></use></svg>
+            <span>Habitaciones</span>
+        </a>
+
+        <a class="nav-item active">
+            <svg class="ui-icon" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><use href="../assets/icons/sprite.svg#reservas"></use></svg>
+            <span>Reservas</span>
+        </a>
+
+        <a class="nav-item">
+            <svg class="ui-icon" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><use href="../assets/icons/sprite.svg#finanzas"></use></svg>
+            <span>Finanzas</span>
+        </a>
+
+        <a class="nav-item">
+            <svg class="ui-icon" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><use href="../assets/icons/sprite.svg#limpieza"></use></svg>
+            <span>Limpieza</span>
+        </a>
+
+    </nav>
+
+</div>
+
+<script type="module" src="../controllers/reservasController.js"></script>
+    <script type="module" src="../controllers/pwaController.js"></script>
+</body>
+</html>

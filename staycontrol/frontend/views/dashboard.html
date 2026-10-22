@@ -1,0 +1,190 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>StayControl - Dashboard</title>
+
+    <link rel="preload" href="../assets/fonts/DMSans-Variable.ttf" as="font" type="font/ttf" crossorigin>
+
+    <link rel="stylesheet" href="../assets/css/dashboard.css">
+    <link rel="stylesheet" href="../assets/css/negocio.css">
+    <link rel="stylesheet" href="../assets/css/experiencia.css">
+    <meta name="theme-color" content="#0f172a">
+    <link rel="manifest" href="/manifest.json">
+    <link rel="apple-touch-icon" href="/assets/icons/pwa-180.png">
+    <link rel="stylesheet" href="../assets/css/pwa.css">
+</head>
+
+<body>
+
+<div class="dashboard">
+
+    <!-- HEADER -->
+    <header class="header">
+
+        <div>
+            <p class="hello">Bienvenido</p>
+            <h1 id="nombreHotelDashboard">Mi hotel</h1>
+        </div>
+
+    </header>
+
+    <!-- CONTENIDO -->
+    <main class="content">
+
+        <!-- OCUPACIÓN -->
+        <section class="card occupation-card">
+
+            <div class="card-title">
+                <strong>Ocupación de Habitaciones</strong>
+                <span>12 / 16</span>
+            </div>
+
+            <div class="progress">
+                <div class="progress-fill"></div>
+            </div>
+
+            <div class="legend">
+
+                <div class="legend-item">
+                    <svg class="ui-icon" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><use href="../assets/icons/sprite.svg#punto"></use></svg>
+                    <span>12 Ocupadas</span>
+                </div>
+
+                <div class="legend-item">
+                    <svg class="ui-icon" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><use href="../assets/icons/sprite.svg#punto"></use></svg>
+                    <span>4 Disponibles</span>
+                </div>
+
+            </div>
+
+        </section>
+
+        <!-- INGRESOS / GASTOS -->
+        <section class="finance-grid">
+
+            <div class="card finance-card">
+
+                <div class="finance-title">
+                    <svg class="ui-icon" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><use href="../assets/icons/sprite.svg#ingreso"></use></svg>
+                    <span>Ingresos</span>
+                </div>
+
+                <strong class="income">$3.450</strong>
+                <small>Este mes</small>
+
+            </div>
+
+            <div class="card finance-card">
+
+                <div class="finance-title">
+                    <svg class="ui-icon" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><use href="../assets/icons/sprite.svg#gasto"></use></svg>
+                    <span>Gastos</span>
+                </div>
+
+                <strong class="expense">$1.200</strong>
+                <small>Este mes</small>
+
+            </div>
+
+        </section>
+
+        <!-- ALERTA -->
+        <section class="alert">
+
+            <div class="info-icon">
+                <svg class="ui-icon" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><use href="../assets/icons/sprite.svg#info"></use></svg>
+            </div>
+
+            <div>
+                <strong>Limpieza Pendiente</strong>
+                <p>3 habitaciones requieren atención urgente.</p>
+            </div>
+
+        </section>
+
+        <!-- RESERVAS -->
+        <section class="reservations">
+
+            <div class="section-title">
+                <h2>Próximas Reservas</h2>
+                <a href="#">Ver todas</a>
+            </div>
+
+            <!-- RESERVA 1 -->
+            <div class="reservation">
+
+                <div class="room">
+                    104
+                </div>
+
+                <div class="reservation-info">
+                    <strong>Carlos Mendoza</strong>
+                    <span>Check-in: Hoy, 15:00</span>
+                </div>
+
+                <span class="status confirmed">
+                    CONFIRMADA
+                </span>
+
+            </div>
+
+            <!-- RESERVA 2 -->
+            <div class="reservation">
+
+                <div class="room">
+                    202
+                </div>
+
+                <div class="reservation-info">
+                    <strong>Ana María Silva</strong>
+                    <span>Check-in: Mañana, 12:00</span>
+                </div>
+
+                <span class="status pending">
+                    PENDIENTE
+                </span>
+
+            </div>
+
+        </section>
+
+    </main>
+
+    <!-- NAVBAR -->
+    <nav class="bottom-nav">
+
+        <a class="nav-item active">
+            <svg class="ui-icon" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><use href="../assets/icons/sprite.svg#inicio"></use></svg>
+            <span>Inicio</span>
+        </a>
+
+        <a class="nav-item">
+            <svg class="ui-icon" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><use href="../assets/icons/sprite.svg#habitaciones"></use></svg>
+            <span>Habitaciones</span>
+        </a>
+
+        <a class="nav-item">
+            <svg class="ui-icon" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><use href="../assets/icons/sprite.svg#reservas"></use></svg>
+            <span>Reservas</span>
+        </a>
+
+        <a class="nav-item">
+            <svg class="ui-icon" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><use href="../assets/icons/sprite.svg#finanzas"></use></svg>
+            <span>Finanzas</span>
+        </a>
+
+        <a class="nav-item">
+            <svg class="ui-icon" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><use href="../assets/icons/sprite.svg#limpieza"></use></svg>
+            <span>Limpieza</span>
+        </a>
+
+    </nav>
+
+</div>
+
+<script type="module" src="../controllers/dashboardController.js"></script>
+    <script type="module" src="../controllers/pwaController.js"></script>
+</body>
+</html>

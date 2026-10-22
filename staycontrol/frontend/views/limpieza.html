@@ -1,0 +1,226 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>StayControl - Limpieza</title>
+
+    <link rel="preload" href="../assets/fonts/DMSans-Variable.ttf" as="font" type="font/ttf" crossorigin>
+
+    <link rel="stylesheet" href="../assets/css/limpieza.css">
+    <link rel="stylesheet" href="../assets/css/negocio.css">
+    <link rel="stylesheet" href="../assets/css/experiencia.css">
+    <meta name="theme-color" content="#0f172a">
+    <link rel="manifest" href="/manifest.json">
+    <link rel="apple-touch-icon" href="/assets/icons/pwa-180.png">
+    <link rel="stylesheet" href="../assets/css/pwa.css">
+</head>
+
+<body>
+
+<div class="app">
+
+    <!-- HEADER -->
+    <header class="header">
+        <h1>Tareas de Limpieza</h1>
+
+        <span class="today">
+            Todas las fechas
+        </span>
+    </header>
+
+    <!-- CLEANING TASKS -->
+    <main class="tasks">
+
+        <!-- TASK 103 -->
+        <article class="task-card" data-numero="103">
+
+            <button class="checkbox" type="button"></button>
+
+            <div class="task-info">
+
+                <div class="task-top">
+
+                    <div class="room-name">
+                        <strong>Hab. 103</strong>
+                        <span>(Suite)</span>
+                    </div>
+
+                    <span class="priority urgent">
+                        URGENTE
+                    </span>
+
+                </div>
+
+                <div class="task-bottom">
+
+                    <div class="staff">
+                        <svg class="ui-icon" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><use href="../assets/icons/sprite.svg#usuario"></use></svg>
+                        <span>Juana Pérez</span>
+                    </div>
+
+                    <span class="task-status pending">
+                        Pendiente
+                    </span>
+
+                </div>
+
+            </div>
+
+        </article>
+
+
+        <!-- TASK 201 -->
+        <article class="task-card" data-numero="201">
+
+            <button class="checkbox" type="button"></button>
+
+            <div class="task-info">
+
+                <div class="task-top">
+
+                    <div class="room-name">
+                        <strong>Hab. 201</strong>
+                        <span>(Individual)</span>
+                    </div>
+
+                    <span class="priority normal">
+                        NORMAL
+                    </span>
+
+                </div>
+
+                <div class="task-bottom">
+
+                    <div class="staff">
+                        <svg class="ui-icon" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><use href="../assets/icons/sprite.svg#usuario"></use></svg>
+                        <span>María Gómez</span>
+                    </div>
+
+                    <span class="task-status process">
+                        En Proceso
+                    </span>
+
+                </div>
+
+            </div>
+
+        </article>
+
+
+        <!-- TASK 105 -->
+        <article class="task-card" data-numero="105">
+
+            <button class="checkbox checked" type="button">
+                <svg class="ui-icon" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><use href="../assets/icons/sprite.svg#confirmar"></use></svg>
+            </button>
+
+            <div class="task-info">
+
+                <div class="task-top">
+
+                    <div class="room-name">
+                        <strong>Hab. 105</strong>
+                        <span>(Doble)</span>
+                    </div>
+
+                    <span class="priority normal">
+                        NORMAL
+                    </span>
+
+                </div>
+
+                <div class="task-bottom">
+
+                    <div class="staff">
+                        <svg class="ui-icon" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><use href="../assets/icons/sprite.svg#usuario"></use></svg>
+                        <span>Juana Pérez</span>
+                    </div>
+
+                    <span class="task-status completed">
+                        Completada
+                    </span>
+
+                </div>
+
+            </div>
+
+        </article>
+
+
+        <!-- TASK 204 -->
+        <article class="task-card" data-numero="204">
+
+            <button class="checkbox" type="button"></button>
+
+            <div class="task-info">
+
+                <div class="task-top">
+
+                    <div class="room-name">
+                        <strong>Hab. 204</strong>
+                        <span>(Doble)</span>
+                    </div>
+
+                    <span class="priority urgent">
+                        URGENTE
+                    </span>
+
+                </div>
+
+                <div class="task-bottom">
+
+                    <div class="staff">
+                        <svg class="ui-icon" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><use href="../assets/icons/sprite.svg#usuario"></use></svg>
+                        <span>María Gómez</span>
+                    </div>
+
+                    <span class="task-status pending">
+                        Pendiente
+                    </span>
+
+                </div>
+
+            </div>
+
+        </article>
+
+    </main>
+
+
+    <!-- BOTTOM NAV -->
+    <nav class="bottom-nav">
+
+        <a class="nav-item">
+            <svg class="ui-icon" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><use href="../assets/icons/sprite.svg#inicio"></use></svg>
+            <span>Inicio</span>
+        </a>
+
+        <a class="nav-item">
+            <svg class="ui-icon" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><use href="../assets/icons/sprite.svg#habitaciones"></use></svg>
+            <span>Habitaciones</span>
+        </a>
+
+        <a class="nav-item">
+            <svg class="ui-icon" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><use href="../assets/icons/sprite.svg#reservas"></use></svg>
+            <span>Reservas</span>
+        </a>
+
+        <a class="nav-item">
+            <svg class="ui-icon" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><use href="../assets/icons/sprite.svg#finanzas"></use></svg>
+            <span>Finanzas</span>
+        </a>
+
+        <a class="nav-item active">
+            <svg class="ui-icon" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><use href="../assets/icons/sprite.svg#limpieza"></use></svg>
+            <span>Limpieza</span>
+        </a>
+
+    </nav>
+
+</div>
+
+<script type="module" src="../controllers/limpiezaController.js"></script>
+    <script type="module" src="../controllers/pwaController.js"></script>
+</body>
+</html>

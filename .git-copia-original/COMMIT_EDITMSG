@@ -1,0 +1,12 @@
+fix: preservar query params en redirección, mejorar App Shell PWA y actualizar docs
+
+- preparar-publicos.mjs: extraer query params del hash para todas las
+  rutas (no solo /habitaciones), corrigiendo pérdida de filtros como
+  estado y pagina al redirigir desde URLs antiguas.
+- sw.js: pre-cachear index.html como App Shell, cachear vue-assets con
+  estrategia cache-first en runtime (inmutables por hash), servir App
+  Shell cacheado como fallback en navegaciones offline antes de
+  offline.html. Las APIs (/api/**) nunca se cachean. VERSION → v3.
+- habitaciones-spa.md: nota al inicio indicando que el documento es
+  histórico (etapa MPA/Vanilla JS) con resumen de la arquitectura
+  actual basada en Vue 3, Hash History y PWA.

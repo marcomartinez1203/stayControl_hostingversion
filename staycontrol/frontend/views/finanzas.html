@@ -1,0 +1,401 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>StayControl - Finanzas</title>
+
+    <link rel="preload" href="../assets/fonts/DMSans-Variable.ttf" as="font" type="font/ttf" crossorigin>
+
+    <link rel="stylesheet" href="../assets/css/finanzas.css">
+    <link rel="stylesheet" href="../assets/css/negocio.css">
+    <link rel="stylesheet" href="../assets/css/experiencia.css">
+    <meta name="theme-color" content="#0f172a">
+    <link rel="manifest" href="/manifest.json">
+    <link rel="apple-touch-icon" href="/assets/icons/pwa-180.png">
+    <link rel="stylesheet" href="../assets/css/pwa.css">
+</head>
+
+<body>
+
+<div class="app finanzas-app">
+
+    <!-- =========================
+         HEADER
+    ========================== -->
+
+    <header class="header">
+
+        <h1>Finanzas</h1>
+
+        <button class="download-btn">
+
+            <svg class="ui-icon" viewBox="0 0 24 24" role="img" aria-label="Descargar" focusable="false"><use href="../assets/icons/sprite.svg#descargar"></use></svg>
+
+        </button>
+
+    </header>
+
+
+    <!-- =========================
+         CONTENIDO
+    ========================== -->
+
+    <main class="content">
+
+
+        <!-- BALANCE -->
+
+        <section class="balance-container">
+
+            <div class="balance-card">
+
+                <p class="balance-label">
+                    Balance General Estimado
+                </p>
+
+                <h2>
+                    $2.250.00
+                </h2>
+
+                <div class="balance-stats">
+
+                    <span class="income-text">
+                        Ingresos: +$3.450
+                    </span>
+
+                    <span class="expense-text">
+                        Gastos: -$1.200
+                    </span>
+
+                </div>
+
+            </div>
+
+        </section>
+
+
+        <!-- =========================
+             TABS
+        ========================== -->
+
+        <section class="tabs-section">
+
+            <div class="tabs">
+
+                <button
+                    class="tab active"
+                    data-tab="income"
+                >
+                    Ingresos
+                </button>
+
+                <button
+                    class="tab"
+                    data-tab="expense"
+                >
+                    Gastos
+                </button>
+
+            </div>
+
+        </section>
+
+
+        <!-- =========================
+             GRÁFICA
+        ========================== -->
+
+        <section class="chart-section">
+
+            <h3>
+                Análisis Mensual (Ingresos vs Gastos)
+            </h3>
+
+            <div class="chart-box">
+
+                <div class="chart-column">
+
+                    <div class="bars">
+                        <div class="income-bar" style="height: 50px;"></div>
+                        <div class="expense-bar" style="height: 20px;"></div>
+                    </div>
+
+                    <span>May</span>
+
+                </div>
+
+
+                <div class="chart-column">
+
+                    <div class="bars">
+                        <div class="income-bar" style="height: 60px;"></div>
+                        <div class="expense-bar" style="height: 25px;"></div>
+                    </div>
+
+                    <span>Jun</span>
+
+                </div>
+
+
+                <div class="chart-column">
+
+                    <div class="bars">
+                        <div class="income-bar" style="height: 70px;"></div>
+                        <div class="expense-bar" style="height: 30px;"></div>
+                    </div>
+
+                    <span>Jul</span>
+
+                </div>
+
+
+                <div class="chart-column">
+
+                    <div class="bars">
+                        <div class="income-bar" style="height: 45px;"></div>
+                        <div class="expense-bar" style="height: 17.5px;"></div>
+                    </div>
+
+                    <span>Ago</span>
+
+                </div>
+
+
+                <div class="chart-column">
+
+                    <div class="bars">
+                        <div class="income-bar" style="height: 55px;"></div>
+                        <div class="expense-bar" style="height: 22.5px;"></div>
+                    </div>
+
+                    <span>Sep</span>
+
+                </div>
+
+
+                <div class="chart-column">
+
+                    <div class="bars">
+                        <div class="income-bar" style="height: 75px;"></div>
+                        <div class="expense-bar" style="height: 35px;"></div>
+                    </div>
+
+                    <span>Oct</span>
+
+                </div>
+
+            </div>
+
+        </section>
+
+
+        <!-- =========================
+             TRANSACCIONES
+        ========================== -->
+
+        <section class="transactions">
+
+            <h3>
+                Transacciones Recientes
+            </h3>
+
+
+            <!-- TRANSACCIÓN 1 -->
+
+            <article class="transaction">
+
+                <div class="transaction-icon income">
+
+                    <svg class="ui-icon" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><use href="../assets/icons/sprite.svg#ingreso"></use></svg>
+
+                </div>
+
+                <div class="transaction-info">
+
+                    <strong>
+                        Arriendo Hab. 102
+                    </strong>
+
+                    <div class="transaction-meta">
+
+                        <span>
+                            Hoy, 10:30
+                        </span>
+
+                        <span class="separator">
+                            •
+                        </span>
+
+                        <span class="category">
+                            Habitación
+                        </span>
+
+                    </div>
+
+                </div>
+
+                <strong class="transaction-value income-value">
+                    +$120.00
+                </strong>
+
+            </article>
+
+
+            <!-- TRANSACCIÓN 2 -->
+
+            <article class="transaction">
+
+                <div class="transaction-icon expense">
+
+                    <svg class="ui-icon" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><use href="../assets/icons/sprite.svg#gasto"></use></svg>
+
+                </div>
+
+                <div class="transaction-info">
+
+                    <strong>
+                        Artículos de Limpieza
+                    </strong>
+
+                    <div class="transaction-meta">
+
+                        <span>
+                            Ayer, 16:45
+                        </span>
+
+                        <span class="separator">
+                            •
+                        </span>
+
+                        <span class="category">
+                            Mantenimiento
+                        </span>
+
+                    </div>
+
+                </div>
+
+                <strong class="transaction-value expense-value">
+                    -$45.00
+                </strong>
+
+            </article>
+
+
+            <!-- TRANSACCIÓN 3 -->
+
+            <article class="transaction">
+
+                <div class="transaction-icon income">
+
+                    <svg class="ui-icon" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><use href="../assets/icons/sprite.svg#ingreso"></use></svg>
+
+                </div>
+
+                <div class="transaction-info">
+
+                    <strong>
+                        Arriendo Hab. 204
+                    </strong>
+
+                    <div class="transaction-meta">
+
+                        <span>
+                            24 Oct, 11:15
+                        </span>
+
+                        <span class="separator">
+                            •
+                        </span>
+
+                        <span class="category">
+                            Reserva
+                        </span>
+
+                    </div>
+
+                </div>
+
+                <strong class="transaction-value income-value">
+                    +$350.00
+                </strong>
+
+            </article>
+
+
+            <!-- TRANSACCIÓN 4 -->
+
+            <article class="transaction">
+
+                <div class="transaction-icon expense">
+
+                    <svg class="ui-icon" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><use href="../assets/icons/sprite.svg#gasto"></use></svg>
+
+                </div>
+
+                <div class="transaction-info">
+
+                    <strong>
+                        Pago de Electricidad
+                    </strong>
+
+                    <div class="transaction-meta">
+
+                        <span>
+                            22 Oct, 09:00
+                        </span>
+
+                        <span class="separator">
+                            •
+                        </span>
+
+                        <span class="category">
+                            Servicios
+                        </span>
+
+                    </div>
+
+                </div>
+
+                <strong class="transaction-value expense-value">
+                    -$180.00
+                </strong>
+
+            </article>
+
+        </section>
+
+    </main>
+
+    <nav class="bottom-nav" aria-label="Navegación principal">
+        <a class="nav-item" href="/dashboard">
+            <svg class="ui-icon" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><use href="../assets/icons/sprite.svg#inicio"></use></svg>
+            <span>Inicio</span>
+        </a>
+        <a class="nav-item" href="/habitaciones">
+            <svg class="ui-icon" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><use href="../assets/icons/sprite.svg#habitaciones"></use></svg>
+            <span>Habitaciones</span>
+        </a>
+        <a class="nav-item" href="/reservas">
+            <svg class="ui-icon" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><use href="../assets/icons/sprite.svg#reservas"></use></svg>
+            <span>Reservas</span>
+        </a>
+        <a class="nav-item active" href="/finanzas" aria-current="page">
+            <svg class="ui-icon" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><use href="../assets/icons/sprite.svg#finanzas"></use></svg>
+            <span>Finanzas</span>
+        </a>
+        <a class="nav-item" href="/limpieza">
+            <svg class="ui-icon" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><use href="../assets/icons/sprite.svg#limpieza"></use></svg>
+            <span>Limpieza</span>
+        </a>
+    </nav>
+
+</div>
+
+<script type="module" src="../controllers/finanzasController.js"></script>
+
+    <script type="module" src="../controllers/pwaController.js"></script>
+</body>
+</html>

@@ -1,0 +1,84 @@
+/* Adaptación del diseño original a componentes Vue; mantiene DM Sans y la paleta. */
+#app { width: 100%; display: flex; justify-content: center; }
+.vue-shell, .vue-auth-shell { width: min(402px, 100%); }
+.vue-shell { position: relative; }
+.vue-auth-shell { background: var(--background); border-radius: 32px; overflow: hidden; }
+.vue-auth-shell .login { box-shadow: none; }
+.vue-main { display: block; padding-bottom: 24px; }
+.vue-main > section { animation: vue-enter 220ms ease-out; }
+.vue-stack { display: flex; flex-direction: column; gap: 18px; }
+.vue-fields, .room-selector { display: grid; gap: 14px; min-width: 0; }
+fieldset.vue-fields { border: 0; padding: 0; margin: 0; width: 100%; }
+.vue-fields label, .vue-inline label { display: grid; gap: 6px; font-size: 13px; color: var(--text); }
+.vue-main :is(input,select,textarea) { width: 100%; min-width: 0; min-height: 44px; border: 1px solid var(--border); border-radius: 10px; background: white; color: var(--dark); padding: 10px 12px; font: inherit; }
+.vue-main textarea { min-height: 90px; resize: vertical; }
+.vue-main input[readonly] { background: #f1f5f9; }
+.vue-main button, .vue-button { display: inline-flex; align-items: center; justify-content: center; gap: 7px; min-height: 40px; padding: 9px 12px; border: 1px solid transparent; border-radius: 10px; background: var(--dark); color: white; font: inherit; font-size: 12px; font-weight: 600; cursor: pointer; text-decoration: none; }
+.vue-main button.secondary, .vue-button.secondary { background: white; color: var(--text); border-color: var(--border); }
+.vue-main :is(button,.vue-button) .ui-icon { width: 18px; height: 18px; }
+.vue-toolbar, .vue-inline, .vue-actions, .vue-pagination { display: flex; align-items: center; flex-wrap: wrap; gap: 8px; }
+.vue-inline { margin-top: 12px; align-items: end; }
+.vue-inline label { flex: 1; }
+.vue-toolbar { justify-content: space-between; }
+.vue-pagination { justify-content: center; font-size: 11px; }
+.vue-pagination button { padding-inline: 10px; }
+.vue-actions { margin-top: 12px; }
+.vue-actions form { width: 100%; }
+.vue-tools { color: var(--text); font-size: 12px; }
+.vue-tools > form { margin-top: 12px; }
+.vue-main summary { cursor: pointer; padding: 5px 0; font-size: 12px; color: var(--text); }
+.view-notice { font-size: 12px; line-height: 1.65; color: var(--text); overflow-wrap: anywhere; }
+.view-notice:empty { display: none; }
+.view-notice > button { margin: 6px; }
+.vue-empty { padding: 18px; border-radius: 12px; border: 1px dashed var(--border); text-align: center; color: var(--text); font-size: 13px; }
+.vue-editor { padding: 18px; }
+.vue-main .section-title h2 { font-size: 19px; }
+.vue-record { padding: 18px; display: grid; gap: 10px; overflow-wrap: anywhere; }
+.vue-record-title { display: flex; align-items: flex-start; justify-content: space-between; gap: 10px; }
+.vue-record-title h2 { font-size: 18px; font-weight: 600; min-width: 0; }
+.vue-record p { font-size: 13px; color: var(--text); }
+.vue-record small { font-size: 11px; color: var(--text); }
+.vue-price { text-align: right; font-size: 19px; font-variant-numeric: tabular-nums; }
+.vue-price small { font-weight: 400; }
+.vue-status { flex-shrink: 0; padding: 4px 7px; border-radius: 6px; font-size: 10px; color: var(--text); background: #f1f5f9; }
+.vue-status:is([data-estado="DISPONIBLE"],[data-estado="CONFIRMADA"],[data-estado="COMPLETADA"],[data-estado="REGISTRADO"]) { background: #ecfdf5; color: #047857; }
+.vue-status:is([data-estado="PENDIENTE"],[data-estado="LIMPIEZA"],[data-estado="EN_PROCESO"]) { background: #fffbeb; color: #92400e; }
+.vue-status:is([data-estado="CANCELADA"],[data-estado="ANULADO"]) { background: #fef2f2; color: #b91c1c; }
+.vue-filters { display: flex; gap: 8px; overflow-x: auto; padding-bottom: 5px; }
+.vue-filters button { background: white; color: var(--text); border-color: var(--border); border-radius: 24px; white-space: nowrap; }
+.vue-filters button.active { background: var(--dark); color: white; }
+.vue-tabs { display: grid; grid-template-columns: 1fr 1fr; padding: 4px; border: 1px solid var(--border); border-radius: 12px; background: white; }
+.vue-tabs button { background: transparent; color: var(--text); }
+.vue-tabs button.active { color: var(--blue); background: var(--background); }
+.vue-calendar { display: grid; gap: 12px; }
+.vue-days { display: grid; grid-template-columns: repeat(6,minmax(0,1fr)); gap: 5px; }
+.vue-days button { display: grid; gap: 3px; padding: 10px 2px; background: white; color: var(--text); border-color: var(--border); }
+.vue-days button.active { background: var(--blue); color: white; }
+.vue-days small { font-size: 10px; }
+.vue-days strong { font-size: 17px; }
+.vue-balance { padding: 20px; border-radius: 16px; background: var(--dark); color: white; display: grid; gap: 10px; box-shadow: 0 10px 24px #0f172a18; }
+.vue-balance > small { color: #cbd5e1; font-size: 12px; }
+.vue-balance h2 { font-size: 32px; font-weight: 600; overflow-wrap: anywhere; }
+.vue-balance .vue-toolbar { font-size: 12px; padding-top: 8px; border-top: 1px solid #334155; }
+.vue-subtitle { font-size: 14px; font-weight: 500; color: var(--text); margin-bottom: 10px; }
+.vue-chart { padding: 14px; display: grid; grid-template-columns: repeat(6,minmax(0,1fr)); gap: 12px; }
+.vue-chart-column { text-align: center; min-width: 0; }
+.vue-bars { height: 100px; display: flex; align-items: flex-end; justify-content: center; gap: 3px; }
+.vue-bars i { display: block; width: 10px; border-radius: 4px 4px 0 0; transition: height 200ms ease; }
+.income-bar { background: var(--green); }.expense-bar { background: var(--red); }
+.vue-chart small { font-size: 10px; color: var(--text); }
+.vue-shell .alert, .vue-shell .reservation { text-decoration: none; }
+.vue-auth-content .view-notice { padding: 0 24px; }
+.vue-auth-content .brand-section { padding-top: 44px; padding-bottom: 30px; }
+.vue-auth-content .forgot-password { font-size: 13px; color: var(--blue); }
+.vue-shell .pwa-tools { flex-shrink: 0; }
+.vue-shell .header h1 { font-size: 22px; }
+@keyframes vue-enter { from { opacity: .5; transform: translateY(5px); } to { opacity: 1; transform: translateY(0); } }
+@media (max-width: 500px) {
+  .vue-shell, .vue-auth-shell { width: 100%; border-radius: 0; }
+  .vue-shell { height: 100dvh; }
+  .vue-auth-shell .login { max-width: none; min-height: calc(100dvh - 40px); }
+  .vue-main { padding-inline: 18px; }
+  .vue-main :is(input,select,textarea), .vue-auth-content input { font-size: 16px; }
+}
+@media (prefers-reduced-motion: reduce) { .vue-main > section { animation: none; } .vue-bars i { transition: none; } }

@@ -1,0 +1,319 @@
+* {
+    box-sizing: border-box;
+    margin: 0;
+    padding: 0;
+}
+
+:root {
+    --background: #f8fafc;
+    --dark: #0f172a;
+    --text: #475569;
+    --muted: #94a3b8;
+    --border: #e2e8f0;
+    --blue: #2563eb;
+    --white: #ffffff;
+}
+
+body {
+    min-height: 100vh;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    background: #dfe4ea;
+    font-family: "Inter", sans-serif;
+}
+
+/* Contenedor principal */
+
+.login {
+    width: 100%;
+    max-width: 402px;
+    min-height: 874px;
+
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+
+    overflow: hidden;
+
+    background: var(--background);
+    border-radius: 32px;
+}
+
+/* =========================
+   TOP
+========================= */
+
+.top-area {
+    width: 100%;
+}
+
+/* =========================
+   BRAND
+========================= */
+
+.brand-section {
+    width: 100%;
+
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+
+    gap: 16px;
+
+    padding-top: 80px;
+    padding-bottom: 40px;
+}
+
+.logo-box {
+    width: 64px;
+    height: 64px;
+
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    border-radius: 16px;
+
+    background: var(--dark);
+}
+
+.key-icon {
+    width: 32px;
+    height: 32px;
+}
+
+.brand-text {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 4px;
+}
+
+.brand-text h1 {
+    color: var(--dark);
+
+    font-size: 28px;
+    font-weight: 800;
+    line-height: normal;
+}
+
+.brand-text p {
+    color: var(--text);
+
+    font-size: 14px;
+    font-weight: 400;
+    line-height: normal;
+}
+
+/* =========================
+   FORM
+========================= */
+
+.form-section {
+    width: 100%;
+
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+
+    padding: 0 24px;
+}
+
+.field {
+    width: 100%;
+
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+}
+
+.field label {
+    color: var(--text);
+
+    font-size: 13px;
+    font-weight: 600;
+    line-height: normal;
+}
+
+.input-container {
+    width: 100%;
+    height: 48px;
+
+    display: flex;
+    align-items: center;
+
+    gap: 12px;
+
+    padding: 0 16px;
+
+    background: var(--white);
+
+    border: 1px solid var(--border);
+    border-radius: 12px;
+}
+
+.input-icon {
+    width: 18px;
+    height: 18px;
+
+    flex-shrink: 0;
+
+    color: #94a3b8;
+}
+
+.input-container input {
+    flex: 1;
+
+    min-width: 0;
+
+    border: none;
+    outline: none;
+    background: transparent;
+
+    color: var(--text);
+
+    font-family: inherit;
+    font-size: 14px;
+}
+
+.input-container input[type="password"] {
+    letter-spacing: 2px;
+}
+
+.input-container input:focus {
+    outline: none;
+}
+
+.eye-button {
+    width: 18px;
+    height: 18px;
+
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    padding: 0;
+
+    border: none;
+    background: transparent;
+
+    color: #94a3b8;
+
+    cursor: pointer;
+}
+
+.eye-button svg {
+    width: 18px;
+    height: 18px;
+}
+
+/* Forgot password */
+
+.forgot-password {
+    width: 100%;
+
+    display: flex;
+    justify-content: flex-end;
+}
+
+.forgot-password a {
+    color: var(--blue);
+
+    font-size: 13px;
+    font-weight: 600;
+
+    text-decoration: underline;
+
+    cursor: pointer;
+}
+
+/* =========================
+   BOTTOM
+========================= */
+
+.bottom-area {
+    width: 100%;
+
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+
+    gap: 24px;
+
+    padding: 0 24px 24px;
+}
+
+/* Login button */
+
+.login-button {
+    width: 100%;
+    height: 52px;
+
+    border: none;
+    border-radius: 12px;
+
+    background: var(--dark);
+    color: white;
+
+    font-family: inherit;
+    font-size: 16px;
+    font-weight: 600;
+
+    cursor: pointer;
+
+    transition:
+        transform 0.15s ease,
+        opacity 0.15s ease;
+}
+
+.login-button:hover {
+    opacity: 0.94;
+}
+
+.login-button:active {
+    transform: scale(0.99);
+}
+
+/* Register */
+
+.register-footer {
+    width: 100%;
+
+    display: flex;
+    align-items: flex-start;
+    justify-content: center;
+
+    gap: 4px;
+
+    font-size: 13px;
+    line-height: normal;
+}
+
+.register-footer span {
+    color: var(--text);
+    font-weight: 400;
+}
+
+.register-footer a {
+    color: var(--blue);
+    font-weight: 600;
+
+    text-decoration: underline;
+}
+
+/* =========================
+   RESPONSIVE
+========================= */
+
+@media (max-width: 500px) {
+
+    body {
+        background: var(--background);
+    }
+
+    .login {
+        min-height: 100vh;
+        border-radius: 0;
+    }
+}

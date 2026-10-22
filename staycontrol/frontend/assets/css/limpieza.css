@@ -1,0 +1,357 @@
+* {
+    box-sizing: border-box;
+    margin: 0;
+    padding: 0;
+}
+
+:root {
+    --background: #f8fafc;
+    --dark: #0f172a;
+    --text: #475569;
+    --muted: #94a3b8;
+    --border: #e2e8f0;
+
+    --blue: #2563eb;
+    --green: #10b981;
+    --yellow: #f59e0b;
+    --red: #ef4444;
+
+    --white: #ffffff;
+}
+
+body {
+    min-height: 100vh;
+
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    background: #dfe4ea;
+
+    font-family: "Inter", sans-serif;
+}
+
+.app {
+    width: 402px;
+    height: 874px;
+
+    display: flex;
+    flex-direction: column;
+
+    overflow: hidden;
+
+    background: var(--background);
+
+    border-radius: 32px;
+}
+
+/* =========================
+   HEADER
+========================= */
+
+.header {
+    min-height: 60px;
+    flex-shrink: 0;
+
+    display: flex;
+    flex-wrap: wrap;
+    gap: 8px;
+    align-items: center;
+    justify-content: space-between;
+
+    padding: 16px 24px;
+}
+
+.header h1 {
+    color: var(--dark);
+
+    font-size: 20px;
+    font-weight: 700;
+}
+
+.today {
+    padding: 6px 12px;
+
+    border-radius: 100px;
+
+    background: var(--blue);
+
+    color: white;
+
+    font-size: 12px;
+    font-weight: 600;
+}
+
+/* =========================
+   TASKS
+========================= */
+
+.tasks {
+    flex: 1;
+
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+
+    padding: 0 24px 20px;
+
+    overflow-y: auto;
+
+    scrollbar-width: none;
+}
+
+.tasks::-webkit-scrollbar {
+    display: none;
+}
+
+/* =========================
+   TASK CARD
+========================= */
+
+.task-card {
+    width: 100%;
+    min-height: 72px;
+
+    display: flex;
+    align-items: center;
+
+    gap: 12px;
+
+    padding: 16px;
+
+    background: var(--white);
+
+    border: 1px solid var(--border);
+    border-radius: 16px;
+}
+
+/* =========================
+   CHECKBOX
+========================= */
+
+.checkbox {
+    width: 24px;
+    height: 24px;
+
+    flex-shrink: 0;
+
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    background: white;
+
+    border: 2px solid var(--border);
+    border-radius: 6px;
+
+    cursor: pointer;
+}
+
+.checkbox.checked {
+    background: var(--green);
+    border-color: var(--green);
+}
+
+.checkbox img {
+    width: 14px;
+    height: 14px;
+}
+
+/* =========================
+   TASK INFO
+========================= */
+
+.task-info {
+    flex: 1;
+    min-width: 0;
+
+    display: flex;
+    flex-direction: column;
+    gap: 6px;
+}
+
+.task-top,
+.task-bottom {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+
+    gap: 8px;
+
+    width: 100%;
+}
+
+/* =========================
+   ROOM
+========================= */
+
+.room-name {
+    display: flex;
+    align-items: baseline;
+
+    gap: 4px;
+
+    min-width: 0;
+
+    flex-wrap: wrap;
+    overflow-wrap: anywhere;
+}
+
+/* Las descripciones reales y las fechas pueden ocupar más de una línea. */
+.task-top, .task-bottom { flex-wrap: wrap; }
+.room-name { flex: 1 1 120px; }
+
+.room-name strong {
+    color: var(--dark);
+
+    font-size: 15px;
+    font-weight: 700;
+}
+
+.room-name span {
+    color: var(--text);
+
+    font-size: 12px;
+}
+
+/* =========================
+   PRIORITY
+========================= */
+
+.priority {
+    flex-shrink: 0;
+
+    padding: 2px 6px;
+
+    border-radius: 4px;
+
+    font-size: 10px;
+    font-weight: 600;
+}
+
+.priority.urgent {
+    color: var(--red);
+
+    background: rgba(239, 68, 68, 0.08);
+}
+
+.priority.normal {
+    color: var(--yellow);
+
+    background: rgba(245, 158, 11, 0.08);
+}
+
+/* =========================
+   STAFF
+========================= */
+
+.staff {
+    display: flex;
+    align-items: center;
+
+    gap: 4px;
+
+    min-width: 0;
+}
+
+.staff img {
+    width: 14px;
+    height: 14px;
+}
+
+.staff span {
+    color: var(--text);
+
+    font-size: 12px;
+
+    white-space: normal;
+    overflow-wrap: anywhere;
+}
+
+/* =========================
+   STATUS
+========================= */
+
+.task-status {
+    flex-shrink: 0;
+
+    font-size: 12px;
+    font-weight: 600;
+}
+
+.task-status.pending {
+    color: var(--yellow);
+}
+
+.task-status.process {
+    color: var(--blue);
+}
+
+.task-status.completed {
+    color: var(--green);
+}
+
+/* =========================
+   BOTTOM NAV
+========================= */
+
+.bottom-nav {
+    height: 72px;
+    flex-shrink: 0;
+
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+
+    padding: 0 16px;
+
+    background: white;
+
+    border-top: 1px solid var(--border);
+}
+
+.nav-item {
+    width: 64px;
+
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+
+    gap: 4px;
+
+    color: var(--text);
+
+    text-decoration: none;
+
+    font-size: 11px;
+
+    cursor: pointer;
+}
+
+.nav-item img {
+    width: 24px;
+    height: 24px;
+}
+
+.nav-item.active {
+    color: var(--blue);
+
+    font-weight: 600;
+}
+
+/* =========================
+   RESPONSIVE
+========================= */
+
+@media (max-width: 500px) {
+    body {
+        background: var(--background);
+    }
+
+    .app {
+        width: 100%;
+        height: 100vh;
+
+        border-radius: 0;
+    }
+}

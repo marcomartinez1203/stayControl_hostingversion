@@ -1,0 +1,17 @@
+{
+  "id": "/",
+  "name": "StayControl · Gestión hotelera",
+  "short_name": "StayControl",
+  "description": "Administra las habitaciones, reservas, limpieza y finanzas de tu hotel.",
+  "lang": "es",
+  "start_url": "/index.html#/login",
+  "scope": "/",
+  "display": "standalone",
+  "background_color": "#f8fafc",
+  "theme_color": "#0f172a",
+  "prefer_related_applications": false,
+  "icons": [
+    { "src": "/assets/icons/pwa-192.png", "sizes": "192x192", "type": "image/png", "purpose": "any maskable" },
+    { "src": "/assets/icons/pwa-512.png", "sizes": "512x512", "type": "image/png", "purpose": "any maskable" }
+  ]
+}

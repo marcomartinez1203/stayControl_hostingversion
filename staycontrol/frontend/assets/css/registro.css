@@ -1,0 +1,70 @@
+.registro {
+    gap: 32px;
+    min-height: min(874px, 100vh);
+}
+
+.registro .brand-section {
+    padding: 40px 24px 32px;
+}
+
+.registro .brand-text {
+    gap: 8px;
+    text-align: center;
+}
+
+.registro .brand-name {
+    color: var(--dark);
+    font-weight: 800;
+    font-size: 18px;
+}
+
+.registro .field-hint,
+.registro .view-notice {
+    color: var(--text);
+    font-size: 12px;
+    line-height: 1.5;
+}
+
+.registro .view-notice {
+    padding: 12px;
+    border: 1px solid var(--border);
+    border-radius: 12px;
+    background: var(--white);
+}
+
+.registro .input-container:focus-within {
+    outline: 2px solid var(--blue);
+    outline-offset: 2px;
+}
+
+.registro a:focus-visible {
+    outline: 2px solid var(--blue);
+    outline-offset: 4px;
+}
+
+.registro .login-button:disabled {
+    opacity: 0.55;
+    cursor: not-allowed;
+    transform: none;
+}
+
+.registro .view-notice[data-estado="error"] {
+    color: #991b1b;
+    border-color: #fca5a5;
+}
+
+.registro .view-notice[data-estado="exito"] {
+    color: #166534;
+    border-color: #86efac;
+}
+
+.registro .register-footer {
+    flex-wrap: wrap;
+}
+
+@media (max-width: 500px) {
+    .registro {
+        min-height: 100vh;
+        min-height: 100dvh;
+    }
+}

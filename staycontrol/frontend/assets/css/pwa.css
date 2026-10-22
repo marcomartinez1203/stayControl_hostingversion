@@ -1,0 +1,36 @@
+.pwa-tools {
+    flex-shrink: 0;
+    width: 100%;
+    color: #475569;
+    font: 12px/1.5 "DM Sans", "Segoe UI", sans-serif;
+}
+.pwa-tools > summary { cursor: pointer; padding: 10px 24px; font-weight: 600; }
+.pwa-panel { display: grid; gap: 10px; padding: 0 24px 14px; max-height: 180px; overflow-y: auto; }
+.pwa-panel p { margin: 0; }
+.pwa-panel p:empty { display: none; }
+.pwa-panel button, .pwa-offline button {
+    padding: 11px 16px; border: 0; border-radius: 12px; background: #0f172a;
+    color: white; font: inherit; font-weight: 600; cursor: pointer;
+}
+.pwa-panel button[hidden], .pwa-connection[hidden] { display: none; }
+.pwa-tools :focus-visible, .pwa-offline :focus-visible { outline: 2px solid #2563eb; outline-offset: 3px; }
+.pwa-connection { flex-shrink: 0; margin: 0; padding: 10px 24px; background: #eff6ff; color: #0f172a; font-size: 12px; }
+.bottom-area > .pwa-tools > summary { padding-inline: 0; }
+.bottom-area > .pwa-tools .pwa-panel { padding-inline: 0; }
+@media (display-mode: standalone) {
+    .app, .dashboard { width: 100%; max-width: 600px; height: 100dvh; border-radius: 0; }
+    .login { width: 100%; max-width: 600px; min-height: 100dvh; border-radius: 0; }
+    .header, .login .top-area { padding-top: max(20px, env(safe-area-inset-top)); }
+}
+/* Pantalla offline autocontenida: nunca contiene datos del hotel. */
+@font-face {
+    font-family: "DM Sans Offline"; src: url("../fonts/DMSans-Variable.ttf") format("truetype");
+    font-weight: 100 1000; font-style: normal; font-display: swap;
+}
+.pwa-offline { margin: 0; min-height: 100dvh; display: grid; place-items: center; background: #f8fafc; color: #0f172a; font: 16px/1.6 "DM Sans Offline", "Segoe UI", sans-serif; }
+.pwa-offline main { width: min(100%, 420px); box-sizing: border-box; padding: 32px; }
+.pwa-offline img { width: 72px; height: 72px; border-radius: 20px; }
+.pwa-offline h1 { font-size: 28px; line-height: 1.2; font-weight: 600; letter-spacing: -.025em; }
+.pwa-offline p { color: #475569; }
+.pwa-offline button { width: 100%; margin: 16px 0; }
+.pwa-offline .pwa-tools > summary, .pwa-offline .pwa-panel { padding-inline: 0; }

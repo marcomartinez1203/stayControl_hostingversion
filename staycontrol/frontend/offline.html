@@ -1,0 +1,23 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="theme-color" content="#0f172a">
+    <link rel="manifest" href="/manifest.json">
+    <link rel="apple-touch-icon" href="/assets/icons/pwa-180.png">
+    <link rel="stylesheet" href="/assets/css/pwa.css">
+    <title>StayControl · Sin conexión</title>
+</head>
+<body class="pwa-offline">
+    <main>
+        <img src="/assets/icons/pwa-192.png" width="72" height="72" alt="StayControl">
+        <h1>No podemos conectar</h1>
+        <p>Comprueba tu conexión y que el servidor de StayControl esté disponible.</p>
+        <p>Para proteger los datos del hotel, las habitaciones, reservas y finanzas no se guardan en este dispositivo para uso sin conexión. Tampoco se envían operaciones pendientes automáticamente.</p>
+        <button type="button" id="pwaRetry">Volver a intentar</button>
+        <noscript><a href="/views/login.html">Volver al inicio</a></noscript>
+    </main>
+    <script type="module" src="/controllers/pwaController.js"></script>
+</body>
+</html>

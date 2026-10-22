@@ -1,0 +1,91 @@
+/* Solo controles de integración; el diseño lo define el CSS original de cada vista. */
+.ui-icon { display: inline-block; width: 24px; height: 24px; flex-shrink: 0; vertical-align: middle; color: inherit; }
+.nav-item .ui-icon { width: 24px; height: 24px; }
+.nav-item.active .ui-icon { color: var(--blue, #2563eb); }
+.search-btn .ui-icon, .calendar-button .ui-icon, .download-btn .ui-icon { width: 18px; height: 18px; color: var(--dark, #0f172a); }
+.legend-item .ui-icon { width: 10px; height: 10px; }
+.legend-item:first-child .ui-icon { color: var(--blue, #2563eb); }
+.legend-item:last-child .ui-icon { color: var(--green, #10b981); }
+.finance-title .ui-icon { width: 18px; height: 18px; }
+.finance-title .ui-icon:has(use[href$="#ingreso"]), .transaction-icon.income .ui-icon { color: var(--green, #10b981); }
+.finance-title .ui-icon:has(use[href$="#gasto"]), .transaction-icon.expense .ui-icon { color: var(--red, #ef4444); }
+.info-icon .ui-icon, .fab .ui-icon, .checkbox.checked .ui-icon { color: white; }
+.info-icon .ui-icon { width: 20px; height: 20px; }
+.status-tag .ui-icon { width: 14px; height: 14px; }
+.guest .ui-icon, .assigned-room .ui-icon, .staff .ui-icon { width: 16px; height: 16px; color: var(--muted, #94a3b8); }
+.checkbox .ui-icon { width: 14px; height: 14px; }
+.transaction-icon .ui-icon { width: 20px; height: 20px; }
+.api-menu { position: relative; font: 12px Inter, sans-serif; color: var(--text, #475569); }
+.api-menu summary, .api-herramientas summary, .api-detalle summary { cursor: pointer; }
+.api-menu[open] { max-width: 160px; }
+.api-menu p { overflow-wrap: anywhere; margin: 8px 0; }
+.api-aviso { color: var(--text, #475569); font-size: 12px; line-height: 1.4; }
+.api-aviso:empty { display: none; }
+.api-aviso[data-error="true"] { color: #991b1b; }
+.api-herramientas { font: 12px Inter, sans-serif; color: var(--text, #475569); margin-bottom: 12px; }
+.api-herramientas > summary { padding: 6px 0; }
+.api-lista { display: flex; flex-direction: column; gap: 16px; }
+.api-detalle { font-size: 11px; color: var(--text, #475569); margin-top: 8px; min-width: 0; }
+.api-detalle p { margin: 6px 0; overflow-wrap: anywhere; }
+.api-detalle code { display: block; overflow-wrap: anywhere; margin: 8px 0; }
+.business-actions { display: flex; align-items: center; flex-wrap: wrap; gap: 8px; margin: 10px 0; font-size: 12px; }
+.api-historial { padding: 10px; border: 1px solid var(--border, #e2e8f0); border-radius: 8px; }
+.api-historial p { width: 100%; overflow-wrap: anywhere; }
+.api-historial[hidden] { display: none; }
+.business-actions button, .business-form button, .business-filters button, .api-herramientas > button, .api-menu button {
+    border: 0; border-radius: 8px; padding: 9px 12px; background: var(--dark, #0f172a); color: white; font: inherit; cursor: pointer;
+}
+.business-actions button:disabled, .business-form button:disabled { opacity: .5; cursor: not-allowed; }
+.download-btn:disabled { opacity: .5; cursor: not-allowed; }
+.business-form, .business-filters { display: grid; gap: 12px; padding: 12px 0; }
+.business-form { padding: 14px; margin-top: 12px; background: var(--white, white); border: 1px solid var(--border, #e2e8f0); border-radius: 12px; }
+.business-form h2 { font-size: 16px; }
+.selector-habitaciones { display: grid; gap: 8px; min-width: 0; }
+.selector-habitaciones .api-aviso { overflow-wrap: anywhere; }
+.business-form label, .business-filters label { display: grid; gap: 5px; }
+.business-form input, .business-form select, .business-filters input, .business-filters select {
+    width: 100%; min-width: 0; box-sizing: border-box; padding: 10px; border: 1px solid var(--border, #e2e8f0); border-radius: 8px; background: white; color: #0f172a; font: inherit;
+}
+.business-form :focus-visible, .business-filters :focus-visible, .api-menu :focus-visible { outline: 2px solid #2563eb; outline-offset: 2px; }
+.task-info, .transaction-info { min-width: 0; }
+.api-lista .room-name span { overflow-wrap: anywhere; }
+.api-lista .transaction-value { max-width: 110px; overflow-wrap: anywhere; }
+
+/* El editor se abre dentro de Cuenta, sin desplazar las tarjetas ni el encabezado. */
+.api-menu[open] > .api-cuenta-panel {
+    position: absolute;
+    right: 0;
+    top: 24px;
+    z-index: 30;
+    width: min(260px, calc(100vw - 48px));
+    max-height: calc(100dvh - 140px);
+    overflow-y: auto;
+    padding: 14px;
+    display: grid;
+    gap: 12px;
+    background: var(--white, white);
+    border: 1px solid var(--border, #e2e8f0);
+    border-radius: 12px;
+    box-shadow: 0 8px 24px #0f172a14;
+}
+.api-hotel-form, .api-hotel-form label { display: grid; gap: 8px; }
+.api-hotel-form input {
+    min-width: 0;
+    width: 100%;
+    box-sizing: border-box;
+    padding: 10px;
+    border: 1px solid var(--border, #e2e8f0);
+    border-radius: 8px;
+    color: var(--dark, #0f172a);
+    background: white;
+    font: inherit;
+}
+.api-hotel-form :disabled { opacity: .6; cursor: wait; }
+.api-menu .api-hotel-mensaje { margin: 0; line-height: 1.5; }
+.api-hotel-mensaje:empty { display: none; }
+
+/* Conserva las tarjetas originales dentro del alto visible, incluso con teclado móvil. */
+@media (max-width: 500px) {
+    .app, .dashboard { height: 100dvh; }
+    main { min-height: 0; }
+}

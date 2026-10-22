@@ -1,0 +1,61 @@
+.recuperacion {
+    gap: 40px;
+    min-height: min(874px, 100vh);
+}
+
+.recuperacion .brand-section {
+    padding: 64px 24px 32px;
+}
+
+.recuperacion .brand-text {
+    gap: 8px;
+    text-align: center;
+}
+
+.recuperacion .brand-name {
+    color: var(--dark);
+    font-size: 18px;
+    font-weight: 800;
+}
+
+.recuperacion .brand-text h1 {
+    font-size: 26px;
+}
+
+.recuperacion .instructions {
+    color: var(--text);
+    font-size: 14px;
+    line-height: 1.6;
+}
+
+.recuperacion .view-notice {
+    padding: 12px;
+    border: 1px solid var(--border);
+    border-radius: 12px;
+    background: var(--white);
+    color: var(--text);
+    font-size: 12px;
+    line-height: 1.5;
+}
+
+.recuperacion .input-container:focus-within,
+.recuperacion a:focus-visible {
+    outline: 2px solid var(--blue);
+    outline-offset: 3px;
+}
+
+.recuperacion .login-button:disabled {
+    height: auto;
+    min-height: 52px;
+    padding: 12px;
+    opacity: 0.55;
+    cursor: not-allowed;
+    transform: none;
+}
+
+@media (max-width: 500px) {
+    .recuperacion {
+        min-height: 100vh;
+        min-height: 100dvh;
+    }
+}

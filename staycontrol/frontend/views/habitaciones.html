@@ -1,0 +1,220 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>StayControl - Habitaciones</title>
+
+    <link rel="preload" href="../assets/fonts/DMSans-Variable.ttf" as="font" type="font/ttf" crossorigin>
+
+    <link rel="stylesheet" href="../assets/css/habitaciones.css">
+    <link rel="stylesheet" href="../assets/css/negocio.css">
+    <link rel="stylesheet" href="../assets/css/experiencia.css">
+    <meta name="theme-color" content="#0f172a">
+    <link rel="manifest" href="/manifest.json">
+    <link rel="apple-touch-icon" href="/assets/icons/pwa-180.png">
+    <link rel="stylesheet" href="../assets/css/pwa.css">
+</head>
+
+<body>
+
+<div class="app">
+
+    <!-- HEADER -->
+    <header class="header">
+        <h1>Habitaciones</h1>
+
+        <button class="search-btn">
+            <svg class="ui-icon" viewBox="0 0 24 24" role="img" aria-label="Buscar" focusable="false"><use href="../assets/icons/sprite.svg#buscar"></use></svg>
+        </button>
+    </header>
+
+    <!-- FILTROS -->
+    <div class="filter-scroll">
+
+        <button class="filter active" data-filter="todas">
+            Todas
+        </button>
+
+        <button class="filter" data-filter="disponibles">
+            Disponibles
+        </button>
+
+        <button class="filter" data-filter="ocupadas">
+            Ocupadas
+        </button>
+
+        <button class="filter" data-filter="limpieza">
+            Limpieza
+        </button>
+
+        <button class="filter" data-filter="mantenimiento">
+            Mantenimiento
+        </button>
+
+    </div>
+
+    <!-- HABITACIONES -->
+    <main class="rooms-list">
+
+        <!-- 101 -->
+        <article class="room-card" data-numero="101" data-status="disponibles">
+
+            <div class="room-top">
+
+                <div class="room-info">
+                    <h2>Hab. 101</h2>
+                    <span>• Individual</span>
+                </div>
+
+                <div class="status-tag available">
+                    <svg class="ui-icon" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><use href="../assets/icons/sprite.svg#disponible"></use></svg>
+                    DISPONIBLE
+                </div>
+
+            </div>
+
+            <div class="room-details">
+
+                <p>Sin huésped actual</p>
+
+                <div class="price">
+                    <strong>$25</strong>
+                    <span>/noche</span>
+                </div>
+
+            </div>
+
+        </article>
+
+        <!-- 102 -->
+        <article class="room-card" data-numero="102" data-status="ocupadas">
+
+            <div class="room-top">
+
+                <div class="room-info">
+                    <h2>Hab. 102</h2>
+                    <span>• Doble</span>
+                </div>
+
+                <div class="status-tag occupied">
+                    <svg class="ui-icon" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><use href="../assets/icons/sprite.svg#ocupada"></use></svg>
+                    OCUPADA
+                </div>
+
+            </div>
+
+            <div class="room-details">
+
+                <div class="guest">
+                    <svg class="ui-icon" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><use href="../assets/icons/sprite.svg#usuario"></use></svg>
+                    <span>Roberto García</span>
+                </div>
+
+                <div class="price">
+                    <strong>$40</strong>
+                    <span>/noche</span>
+                </div>
+
+            </div>
+
+        </article>
+
+        <!-- 103 -->
+        <article class="room-card" data-numero="103" data-status="limpieza">
+
+            <div class="room-top">
+
+                <div class="room-info">
+                    <h2>Hab. 103</h2>
+                    <span>• Suite</span>
+                </div>
+
+                <div class="status-tag cleaning">
+                    <svg class="ui-icon" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><use href="../assets/icons/sprite.svg#limpieza"></use></svg>
+                    EN LIMPIEZA
+                </div>
+
+            </div>
+
+            <div class="room-details">
+
+                <p>Sin huésped actual</p>
+
+                <div class="price">
+                    <strong>$75</strong>
+                    <span>/noche</span>
+                </div>
+
+            </div>
+
+        </article>
+
+        <!-- 104 -->
+        <article class="room-card" data-numero="104" data-status="mantenimiento">
+
+            <div class="room-top">
+
+                <div class="room-info">
+                    <h2>Hab. 104</h2>
+                    <span>• Doble</span>
+                </div>
+
+                <div class="status-tag maintenance">
+                    <svg class="ui-icon" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><use href="../assets/icons/sprite.svg#mantenimiento"></use></svg>
+                    MANTENIMIENTO
+                </div>
+
+            </div>
+
+            <div class="room-details">
+
+                <p>Sin huésped actual</p>
+
+                <div class="price">
+                    <strong>$40</strong>
+                    <span>/noche</span>
+                </div>
+
+            </div>
+
+        </article>
+
+    </main>
+
+    <!-- BOTTOM NAV -->
+    <nav class="bottom-nav">
+
+        <a class="nav-item">
+            <svg class="ui-icon" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><use href="../assets/icons/sprite.svg#inicio"></use></svg>
+            <span>Inicio</span>
+        </a>
+
+        <a class="nav-item active">
+            <svg class="ui-icon" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><use href="../assets/icons/sprite.svg#habitaciones"></use></svg>
+            <span>Habitaciones</span>
+        </a>
+
+        <a class="nav-item">
+            <svg class="ui-icon" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><use href="../assets/icons/sprite.svg#reservas"></use></svg>
+            <span>Reservas</span>
+        </a>
+
+        <a class="nav-item">
+            <svg class="ui-icon" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><use href="../assets/icons/sprite.svg#finanzas"></use></svg>
+            <span>Finanzas</span>
+        </a>
+
+        <a class="nav-item">
+            <svg class="ui-icon" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><use href="../assets/icons/sprite.svg#limpieza"></use></svg>
+            <span>Limpieza</span>
+        </a>
+
+    </nav>
+
+</div>
+
+<script type="module" src="../controllers/habitacionesController.js"></script>
+    <script type="module" src="../controllers/pwaController.js"></script>
+</body>
+</html>
