@@ -36,3 +36,6 @@ build/
 .env
 .env.*
 !.env.example
+
+# Historial conservado al reubicar la copia; no publicar como archivos.
+.git-copia-original/

@@ -1,0 +1,13 @@
+**/.git
+**/.git-copia-original
+**/.env
+**/.env.*
+**/node_modules
+**/target
+**/dist
+**/.public
+**/.vscode
+**/*.log
+**/*.bak
+**/src/test
+**/tests
