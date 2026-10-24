@@ -2,6 +2,9 @@
 #app { width: 100%; display: flex; justify-content: center; }
 .vue-shell, .vue-auth-shell { width: min(402px, 100%); }
 .vue-shell { position: relative; }
+.vue-shell .bottom-nav { min-height: 80px; }
+.vue-shell .bottom-nav .nav-item { min-height: 60px; font-size: 11px; gap: 6px; }
+.vue-shell .bottom-nav .nav-item .ui-icon { width: 26px; height: 26px; }
 .vue-auth-shell { background: var(--background); border-radius: 32px; overflow: hidden; }
 .vue-auth-shell .login { box-shadow: none; }
 .vue-main { display: block; padding-bottom: 24px; }
