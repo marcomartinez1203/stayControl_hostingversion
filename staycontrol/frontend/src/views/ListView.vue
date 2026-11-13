@@ -5,6 +5,7 @@ import { consultar, obtenerHabitacion, eliminar, cambiarEstado, anularMovimiento
 import { requestJson } from "../../services/apiService.js";
 import { useLectura, useBorrador, fechaLocal, dinero, errorTexto, hayOperacion } from "../lifecycle.js";
 import Icon from "../components/Icon.vue";
+import ReservationCalendar from "../components/ReservationCalendar.vue";
 const props = defineProps({ modulo: String });
 const route = useRoute(), router = useRouter();
 const estados = {habitaciones:['DISPONIBLE','OCUPADA','LIMPIEZA','MANTENIMIENTO'],reservas:['CONFIRMADA','CANCELADA','FINALIZADA'],limpieza:['PENDIENTE','EN_PROCESO','COMPLETADA','CANCELADA'],finanzas:['REGISTRADO','ANULADO']};
@@ -14,8 +15,6 @@ const items = ref([]), total = ref(0), cargando = ref(false), ocupado = ref(fals
 const lectura = useLectura();
 const accion = reactive({id:'',motivo:''}); const borrador = useBorrador(accion, ocupado);
 const pagina = computed(() => Math.max(0, Number(route.query.pagina) || 0));
-const semana = ref(fechaLocal());
-const dias = computed(() => Array.from({length:6}, (_,i) => {const d = new Date(`${semana.value}T12:00:00`); d.setDate(d.getDate()+i); return {fecha:fechaLocal(d),nombre:d.toLocaleDateString('es-CO',{weekday:'short'}),numero:d.getDate()};}));
 const maxGrafico = computed(() => Math.max(1,...meses.value.flatMap(m => [Number(m.ingresos),Number(m.egresos)])));
 const montoMoneda = computed(() => String(route.query.moneda || 'COP').toUpperCase());
 function parametros() {
@@ -34,7 +33,6 @@ function aplicar() {
   const llaves = props.modulo === 'habitaciones' ? ['estado','buscar'] : props.modulo === 'reservas' ? ['estado','buscar','fecha'] : props.modulo === 'limpieza' ? ['estado','fecha'] : ['estado','moneda','desde','hasta','tipo'];
   navegar({...Object.fromEntries(llaves.map(k=>[k,filtros[k].trim()])),pagina:0});
 }
-function moverSemana(n) {const d = new Date(`${semana.value}T12:00:00`);d.setDate(d.getDate()+n);semana.value = fechaLocal(d);}
 function esteMes() {const d = new Date();filtros.desde=fechaLocal(new Date(d.getFullYear(),d.getMonth(),1));filtros.hasta=fechaLocal(new Date(d.getFullYear(),d.getMonth()+1,0));aplicar();}
 async function cargar() {
   const signal = lectura(); cargando.value = true; mensaje.value = String(route.query.aviso || ''); items.value=[]; resumen.value=null; meses.value=[];
@@ -64,7 +62,7 @@ async function cargar() {
   } catch(e) { if (!signal.aborted) mensaje.value=errorTexto(e); }
   finally {if (!signal.aborted) cargando.value=false;}
 }
-watch(() => route.fullPath, () => {Object.keys(filtros).forEach(k=>{filtros[k]=String(route.query[k] || (k==='moneda'?'COP':k==='tipo'?'INGRESO':''));}); if (route.query.fecha) semana.value=String(route.query.fecha); cargar();},{immediate:true});
+watch(() => route.fullPath, () => {Object.keys(filtros).forEach(k=>{filtros[k]=String(route.query[k] || (k==='moneda'?'COP':k==='tipo'?'INGRESO':''));}); cargar();},{immediate:true});
 async function ejecutar(item, operacion, estado) {
   if (hayOperacion() || !window.confirm(`${operacion === 'eliminar' ? (props.modulo === 'habitaciones' ? 'Eliminar habitación' : 'Cancelar registro') : 'Cambiar estado a '+etiquetas[estado]}?`)) return;
   ocupado.value=true; borrador.enviado();
@@ -100,8 +98,8 @@ const vencida = item => ['PENDIENTE','EN_PROCESO'].includes(item.estado) && item
     <button>Aplicar filtros</button><button type="button" class="secondary" @click="navegar({},false)">Limpiar filtros</button>
   </fieldset></form></details>
   <div v-if="route.query.habitacionId" class="view-notice">Historial: Hab. {{ habitaciones[route.query.habitacionId] || 'No disponible' }}<button class="secondary" :disabled="ocupado" @click="navegar({habitacionId:'',pagina:0})">Quitar filtro</button></div>
-  <section v-if="modulo==='reservas'" class="vue-calendar"><div class="vue-toolbar"><button class="secondary" aria-label="Seis días anteriores" @click="moverSemana(-6)">‹</button><strong>{{ semana.slice(0,7) }}</strong><button class="secondary" aria-label="Seis días siguientes" @click="moverSemana(6)">›</button></div><div class="vue-days"><button v-for="d in dias" :key="d.fecha" :class="{active:filtros.fecha===d.fecha}" :aria-pressed="filtros.fecha===d.fecha" :disabled="ocupado" @click="navegar({fecha:d.fecha,pagina:0})"><small>{{ d.nombre }}</small><strong>{{ d.numero }}</strong></button></div></section>
-  <div v-if="['reservas','limpieza'].includes(modulo)" class="vue-toolbar"><button class="secondary" :disabled="ocupado" @click="navegar({fecha:fechaLocal(),pagina:0})">Hoy</button><button class="secondary" :disabled="ocupado" @click="navegar({fecha:'',pagina:0})">Todas las fechas</button><small>{{ filtros.fecha || 'Todas las fechas' }}</small></div>
+  <ReservationCalendar v-if="modulo==='reservas'" :value="String(route.query.fecha || '')" :disabled="ocupado" @select="fecha => navegar({fecha,pagina:0})" />
+  <div v-if="modulo==='limpieza'" class="vue-toolbar"><button class="secondary" :disabled="ocupado" @click="navegar({fecha:fechaLocal(),pagina:0})">Hoy</button><button class="secondary" :disabled="ocupado" @click="navegar({fecha:'',pagina:0})">Todas las fechas</button><small>{{ filtros.fecha || 'Todas las fechas' }}</small></div>
   <template v-if="modulo==='finanzas'">
     <div v-if="resumen" class="vue-balance"><small>Balance general estimado</small><h2>{{ dinero(resumen.balance,resumen.moneda) }}</h2><div class="vue-toolbar"><span class="income">Ingresos: {{ dinero(resumen.ingresos,resumen.moneda) }}</span><span class="expense">Gastos: {{ dinero(resumen.egresos,resumen.moneda) }}</span></div><small>{{ resumen.desde || 'Inicio' }} → {{ resumen.hasta || 'Actualidad' }} · No incluye anulados.</small></div>
     <div class="vue-tabs"><button :class="{active:filtros.tipo==='INGRESO'}" :aria-pressed="filtros.tipo==='INGRESO'" :disabled="ocupado" @click="navegar({tipo:'INGRESO',pagina:0})">Ingresos</button><button :class="{active:filtros.tipo==='EGRESO'}" :aria-pressed="filtros.tipo==='EGRESO'" :disabled="ocupado" @click="navegar({tipo:'EGRESO',pagina:0})">Gastos</button></div>

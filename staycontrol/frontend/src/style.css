@@ -2,9 +2,6 @@
 #app { width: 100%; display: flex; justify-content: center; }
 .vue-shell, .vue-auth-shell { width: min(402px, 100%); }
 .vue-shell { position: relative; }
-.vue-shell .bottom-nav { min-height: 80px; }
-.vue-shell .bottom-nav .nav-item { min-height: 60px; font-size: 11px; gap: 6px; }
-.vue-shell .bottom-nav .nav-item .ui-icon { width: 26px; height: 26px; }
 .vue-auth-shell { background: var(--background); border-radius: 32px; overflow: hidden; }
 .vue-auth-shell .login { box-shadow: none; }
 .vue-main { display: block; padding-bottom: 24px; }
@@ -53,12 +50,6 @@ fieldset.vue-fields { border: 0; padding: 0; margin: 0; width: 100%; }
 .vue-tabs { display: grid; grid-template-columns: 1fr 1fr; padding: 4px; border: 1px solid var(--border); border-radius: 12px; background: white; }
 .vue-tabs button { background: transparent; color: var(--text); }
 .vue-tabs button.active { color: var(--blue); background: var(--background); }
-.vue-calendar { display: grid; gap: 12px; }
-.vue-days { display: grid; grid-template-columns: repeat(6,minmax(0,1fr)); gap: 5px; }
-.vue-days button { display: grid; gap: 3px; padding: 10px 2px; background: white; color: var(--text); border-color: var(--border); }
-.vue-days button.active { background: var(--blue); color: white; }
-.vue-days small { font-size: 10px; }
-.vue-days strong { font-size: 17px; }
 .vue-balance { padding: 20px; border-radius: 16px; background: var(--dark); color: white; display: grid; gap: 10px; box-shadow: 0 10px 24px #0f172a18; }
 .vue-balance > small { color: #cbd5e1; font-size: 12px; }
 .vue-balance h2 { font-size: 32px; font-weight: 600; overflow-wrap: anywhere; }
@@ -85,3 +76,78 @@ fieldset.vue-fields { border: 0; padding: 0; margin: 0; width: 100%; }
   .vue-main :is(input,select,textarea), .vue-auth-content input { font-size: 16px; }
 }
 @media (prefers-reduced-motion: reduce) { .vue-main > section { animation: none; } .vue-bars i { transition: none; } }
+
+/* Escala de lectura y controles compartida por todas las vistas Vue. */
+.vue-shell, .vue-auth-shell { width: min(440px, 100%); font-size: 16px; }
+.vue-shell .header h1 { font-size: 27px; }
+.vue-shell .hello { font-size: 15px; }
+.vue-stack { gap: 22px; }
+.vue-fields { gap: 18px; }
+.vue-fields label, .vue-inline label { font-size: 16px; gap: 8px; }
+.vue-main :is(input, select, textarea), .vue-auth-content input { font-size: 17px; min-height: 50px; }
+.vue-main button, .vue-button { min-height: 48px; padding: 12px 15px; font-size: 15px; border-radius: 12px; }
+.vue-main :is(button, .vue-button) .ui-icon { width: 22px; height: 22px; }
+.vue-main summary { font-size: 15px; padding-block: 12px; min-height: 44px; }
+.vue-tools, .view-notice, .vue-empty { font-size: 15px; }
+.vue-record { gap: 14px; padding: 20px; }
+.vue-record-title { flex-wrap: wrap; }
+.vue-record-title h2 { font-size: 22px; }
+.vue-record p { font-size: 16px; }
+.vue-record small, .vue-status { font-size: 13px; }
+.vue-status { padding: 6px 9px; }
+.vue-price { font-size: 24px; }
+.vue-pagination { gap: 10px; font-size: 15px; }
+.vue-pagination small { font-size: 13px; }
+.vue-actions { gap: 10px; }
+.vue-subtitle { font-size: 17px; line-height: 1.5; }
+.vue-balance h2 { font-size: 38px; }
+.vue-balance > small, .vue-balance .vue-toolbar { font-size: 14px; }
+.vue-chart small { font-size: 12px; }
+.vue-chart { gap: 6px; }
+.vue-shell .card-title { gap: 12px; }
+.vue-shell .card-title strong { font-size: 18px; }
+.vue-shell .card-title span { font-size: 17px; white-space: nowrap; }
+.vue-shell .legend { flex-wrap: wrap; gap: 10px 18px; }
+.vue-shell .legend-item, .vue-shell .finance-title { font-size: 15px; }
+.vue-shell .occupation-card > small, .vue-shell .finance-card small { font-size: 13px; }
+.vue-shell .finance-card strong { font-size: 26px; }
+.vue-shell .finance-title .ui-icon { width: 22px; height: 22px; flex-shrink: 0; }
+.vue-shell .info-icon { width: 44px; height: 44px; }
+.vue-shell .info-icon .ui-icon { width: 26px; height: 26px; }
+.vue-shell .alert strong { font-size: 17px; }
+.vue-shell .alert p { font-size: 15px; }
+.vue-main .section-title h2 { font-size: 22px; }
+.vue-shell .section-title { gap: 12px; flex-wrap: wrap; }
+.vue-shell .section-title a { font-size: 15px; min-height: 44px; display: inline-flex; align-items: center; }
+.vue-shell .reservation-info strong { font-size: 17px; overflow-wrap: anywhere; }
+.vue-shell .reservation-info span { font-size: 14px; }
+.vue-shell .room { width: 48px; height: 48px; font-size: 17px; }
+.vue-shell .api-menu { font-size: 15px; margin-left: 0; }
+.vue-shell .api-menu > summary { min-height: 44px; }
+.vue-shell .api-menu button, .vue-shell .api-hotel-form input { font-size: 16px; min-height: 48px; }
+.vue-shell .api-hotel-form label, .vue-shell .api-cuenta-panel p { font-size: 15px; overflow-wrap: anywhere; }
+.vue-shell .bottom-nav { min-height: 88px; padding-inline: 6px; }
+.vue-shell .bottom-nav .nav-item { min-height: 66px; font-size: 12px; gap: 7px; }
+.vue-shell .bottom-nav .nav-item .ui-icon { width: 29px; height: 29px; }
+.vue-shell .nav-item span { max-width: 100%; overflow-wrap: anywhere; }
+.vue-auth-content .brand-text h1 { font-size: 38px; }
+.vue-auth-content .brand-text p { font-size: 17px; }
+.vue-auth-content .input-container { min-height: 56px; }
+.vue-auth-content .eye-button { width: 44px; height: 44px; font-size: 25px; }
+.vue-auth-content .login-button { min-height: 56px; font-size: 18px; }
+.vue-auth-content .register-footer, .vue-auth-content .forgot-password { font-size: 16px; }
+.vue-auth-content .register-footer a, .vue-auth-content .forgot-password { display: inline-flex; align-items: center; min-height: 44px; }
+.vue-auth-content .api-aviso, .vue-auth-content .field small { font-size: 14px; }
+.vue-shell .pwa-tools, .vue-auth-shell .pwa-tools, .vue-shell .pwa-connection { font-size: 14px; }
+.pwa-panel button { min-height: 48px; }
+@media (max-width: 500px) {
+  .vue-shell, .vue-auth-shell { width: 100%; }
+  .vue-shell > .header { padding-inline: 18px; }
+}
+@media (max-width: 360px) {
+  .vue-main { padding-inline: 12px; }
+  .vue-shell .bottom-nav .nav-item { font-size: 11px; }
+  .vue-shell .finance-grid { gap: 8px; }
+  .vue-shell .finance-card { padding: 12px; }
+  .vue-shell .finance-card strong { font-size: 24px; }
+}
