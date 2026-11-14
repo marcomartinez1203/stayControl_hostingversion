@@ -5,7 +5,7 @@ export function iniciarSesion(email, password) {
 }
 
 export function consultarSesion() {
-    return requestJson("/api/v1/auth/me");
+    return requestJson("/api/v1/auth/me", { signal: AbortSignal.timeout(60000) });
 }
 
 export function actualizarHotel(nombreHotel) {

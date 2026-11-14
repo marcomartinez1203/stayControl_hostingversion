@@ -9,4 +9,7 @@ import "../assets/css/pwa.css";
 import "./style.css";
 
 const app = createApp(App).use(router);
-router.isReady().then(() => app.mount("#app"));
+router.isReady().then(() => {
+    app.mount("#app");
+    window.dispatchEvent(new Event("staycontrol:ready"));
+});

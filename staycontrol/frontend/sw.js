@@ -1,5 +1,5 @@
 /* Incrementar VERSION al publicar cambios en los recursos offline. */
-const VERSION = "staycontrol-pwa-vue-v3";
+const VERSION = "staycontrol-pwa-vue-v4";
 const OFFLINE = "/offline.html";
 const APP_SHELL = "/index.html";
 // Lista cerrada: nada de sesiones, perfiles, HTML de negocio ni respuestas API.
@@ -34,8 +34,8 @@ self.addEventListener("fetch", event => {
             try { return await fetch(request); }
             catch {
                 const cache = await caches.open(VERSION);
-                return await cache.match(APP_SHELL)
-                    || await cache.match(OFFLINE)
+                return await cache.match(OFFLINE)
+                    || await cache.match(APP_SHELL)
                     || new Response("Sin conexión. Vuelve a intentarlo cuando el servidor esté disponible.", {
                         status: 503, headers: { "Content-Type": "text/plain; charset=utf-8" }
                     });

@@ -7,6 +7,58 @@
   <link rel="manifest" href="/manifest.json">
   <link rel="apple-touch-icon" href="/assets/icons/pwa-180.png">
   <title>StayControl</title>
+  <style>
+    #startup { position:fixed; inset:0; z-index:1000; display:grid; place-items:center; background:#0f172a; color:#fff; text-align:center; font-family:system-ui,sans-serif; padding:28px; }
+    #startup .startup-content { width:min(100%,340px); }
+    #startup img { width:96px; height:96px; border-radius:28px; box-shadow:0 16px 48px #0003; animation:startup-pulse 1.8s ease-in-out infinite; }
+    #startup h1 { font-size:32px; margin:24px 0 12px; letter-spacing:-1px; }
+    #startup p { color:#cbd5e1; font-size:16px; line-height:1.6; }
+    #startup .startup-dots { display:flex; justify-content:center; gap:9px; margin:26px 0; }
+    #startup i { width:9px; height:9px; border-radius:50%; background:#60a5fa; animation:startup-dot 1.2s infinite; }
+    #startup i:nth-child(2) { animation-delay:.15s; } #startup i:nth-child(3) { animation-delay:.3s; }
+    #startup button { min-height:50px; padding:12px 24px; margin-top:20px; border:0; border-radius:16px; background:#fff; color:#0f172a; font:600 16px system-ui; cursor:pointer; }
+    #startup button:focus-visible { outline:3px solid #60a5fa; outline-offset:5px; }
+    #startup[data-error] img { animation:none; } #startup[data-error] .startup-dots { display:none; }
+    @keyframes startup-pulse { 50% { transform:scale(1.06); } }
+    @keyframes startup-dot { 50% { opacity:.3; transform:translateY(-5px); } }
+    @media(prefers-reduced-motion:reduce) { #startup img,#startup i { animation:none; } }
+  </style>
 </head>
-<body><div id="app"></div><noscript>Activa JavaScript para usar StayControl.</noscript><script type="module" src="/src/main.js"></script></body>
+<body>
+  <div id="startup" role="status" aria-live="polite">
+    <div class="startup-content">
+      <img src="/assets/icons/pwa-192.png" alt="" width="96" height="96">
+      <h1>StayControl</h1><p id="startup-message">Preparando tu espacio…</p>
+      <div class="startup-dots" aria-hidden="true"><i></i><i></i><i></i></div>
+      <button id="startup-retry" type="button" hidden>Volver a intentar</button>
+      <noscript>Activa JavaScript para usar StayControl.</noscript>
+    </div>
+  </div>
+  <script>
+    (() => {
+      const screen = document.getElementById('startup');
+      const message = document.getElementById('startup-message');
+      const retry = document.getElementById('startup-retry');
+      const events = new AbortController();
+      function offline() {
+        if (!navigator.onLine) {
+          screen.dataset.error = 'offline';
+          message.textContent = 'Sin conexión. Revisa tu Wi-Fi o tus datos móviles.';
+          retry.hidden = false;
+        }
+      }
+      retry.addEventListener('click', () => location.reload());
+      window.addEventListener('offline', offline, { signal: events.signal });
+      window.addEventListener('online', () => { message.textContent = 'Conexión recuperada. Pulsa Volver a intentar.'; retry.hidden = false; }, { signal: events.signal });
+      const timeout = setTimeout(() => {
+        screen.dataset.error = 'timeout';
+        message.textContent = navigator.onLine ? 'La aplicación está tardando en responder. Puedes volver a intentarlo.' : 'Sin conexión. Revisa tu Wi-Fi o tus datos móviles.';
+        retry.hidden = false;
+      }, 60000);
+      window.addEventListener('staycontrol:ready', () => { clearTimeout(timeout); events.abort(); screen.remove(); }, { once: true });
+      offline();
+    })();
+  </script>
+  <div id="app"></div><script type="module" src="/src/main.js"></script>
+</body>
 </html>
