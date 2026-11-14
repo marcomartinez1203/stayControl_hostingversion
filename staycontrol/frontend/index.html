@@ -10,7 +10,7 @@
   <style>
     #startup { position:fixed; inset:0; z-index:1000; display:grid; place-items:center; background:#0f172a; color:#fff; text-align:center; font-family:system-ui,sans-serif; padding:28px; }
     #startup .startup-content { width:min(100%,340px); }
-    #startup img { width:96px; height:96px; border-radius:28px; box-shadow:0 16px 48px #0003; animation:startup-pulse 1.8s ease-in-out infinite; }
+    #startup img { width:96px; height:96px; border-radius:28px; box-shadow:0 16px 48px #0003; animation:startup-pulse 2s ease-in-out infinite; }
     #startup h1 { font-size:32px; margin:24px 0 12px; letter-spacing:-1px; }
     #startup p { color:#cbd5e1; font-size:16px; line-height:1.6; }
     #startup .startup-dots { display:flex; justify-content:center; gap:9px; margin:26px 0; }
@@ -19,9 +19,10 @@
     #startup button { min-height:50px; padding:12px 24px; margin-top:20px; border:0; border-radius:16px; background:#fff; color:#0f172a; font:600 16px system-ui; cursor:pointer; }
     #startup button:focus-visible { outline:3px solid #60a5fa; outline-offset:5px; }
     #startup[data-error] img { animation:none; } #startup[data-error] .startup-dots { display:none; }
-    @keyframes startup-pulse { 50% { transform:scale(1.06); } }
+    #startup.is-leaving { opacity:0; transform:translateY(-12px); transition:opacity 250ms ease,transform 250ms ease; }
+    @keyframes startup-pulse { 0%,100% { transform:translateY(0) scale(1) rotate(0); } 35% { transform:translateY(-12px) scale(1.08) rotate(-4deg); } 70% { transform:translateY(-5px) scale(1.03) rotate(3deg); } }
     @keyframes startup-dot { 50% { opacity:.3; transform:translateY(-5px); } }
-    @media(prefers-reduced-motion:reduce) { #startup img,#startup i { animation:none; } }
+    @media(prefers-reduced-motion:reduce) { #startup img,#startup i { animation:none; } #startup.is-leaving { transform:none; transition:none; } }
   </style>
 </head>
 <body>
@@ -40,6 +41,8 @@
       const message = document.getElementById('startup-message');
       const retry = document.getElementById('startup-retry');
       const events = new AbortController();
+      // Solo al abrir/cargar el documento; el login y las rutas SPA no lo reinician.
+      const visibleSince = new Promise(resolve => requestAnimationFrame(() => resolve(performance.now())));
       function offline() {
         if (!navigator.onLine) {
           screen.dataset.error = 'offline';
@@ -55,10 +58,21 @@
         message.textContent = navigator.onLine ? 'La aplicación está tardando en responder. Puedes volver a intentarlo.' : 'Sin conexión. Revisa tu Wi-Fi o tus datos móviles.';
         retry.hidden = false;
       }, 60000);
-      window.addEventListener('staycontrol:ready', () => { clearTimeout(timeout); events.abort(); screen.remove(); }, { once: true });
+      window.addEventListener('staycontrol:ready', async () => {
+        clearTimeout(timeout);
+        const started = await visibleSince;
+        await new Promise(resolve => setTimeout(resolve, Math.max(0, 2000 - (performance.now() - started))));
+        events.abort();
+        screen.classList.add('is-leaving');
+        const reducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+        setTimeout(() => {
+          screen.remove();
+          document.getElementById('app').removeAttribute('inert');
+        }, reducedMotion ? 0 : 250);
+      }, { once: true });
       offline();
     })();
   </script>
-  <div id="app"></div><script type="module" src="/src/main.js"></script>
+  <div id="app" inert></div><script type="module" src="/src/main.js"></script>
 </body>
 </html>
