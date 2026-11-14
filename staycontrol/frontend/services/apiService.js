@@ -2,7 +2,15 @@
  * Cliente JSON de la API: cookies de sesión y CSRF para escrituras del mismo origen.
  * No reintenta automáticamente ni genera claves de idempotencia por petición.
  */
-export async function requestJson(url, { body, headers, ...options } = {}) {
+import { trackStartupRead } from "./startupService.js";
+
+export function requestJson(url, options = {}) {
+    const promise = executeRequest(url, options);
+    return (options.method ?? 'GET').toUpperCase() === 'GET'
+        ? trackStartupRead(promise) : promise;
+}
+
+async function executeRequest(url, { body, headers, ...options } = {}) {
     const requestHeaders = new Headers(headers);
     if (!requestHeaders.has("Accept")) {
         requestHeaders.set("Accept", "application/json");
