@@ -13,6 +13,7 @@ import org.springframework.format.annotation.DateTimeFormat;
 @RequestMapping("/api/v1/reservas")
 public class ReservaController {
     public record EstadoRequest(EstadoReserva estado) { }
+    public record PagoRequest(com.example.staycontrol.model.MetodoPago metodoPago) { }
     private final ReservaService service;
     public ReservaController(ReservaService service) { this.service = service; }
 
@@ -51,5 +52,16 @@ public class ReservaController {
     public ResponseEntity<Void> cancelar(@PathVariable String id) {
         service.cambiarEstado(id, EstadoReserva.CANCELADA);
         return ResponseEntity.noContent().build();
+    }
+
+    @GetMapping("/{id}/pago")
+    public ResponseEntity<MovimientoResponse> obtenerPago(@PathVariable String id) {
+        return service.obtenerPago(id).map(ResponseEntity::ok).orElseGet(() -> ResponseEntity.noContent().build());
+    }
+
+    @PutMapping("/{id}/pago")
+    public MovimientoResponse confirmarPago(@PathVariable String id, @RequestBody PagoRequest pago,
+        java.security.Principal operador) {
+        return service.confirmarPago(id, pago.metodoPago(), operador.getName());
     }
 }

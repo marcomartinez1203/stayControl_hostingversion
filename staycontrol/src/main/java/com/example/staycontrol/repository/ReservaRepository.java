@@ -51,9 +51,20 @@ public class ReservaRepository {
 
     public boolean hayCruce(String habitacionId, String fechaEntrada, String fechaSalida) {
         return mongo.exists(Query.query(Criteria.where("datos.habitacionId").is(habitacionId)
-            .and("estado").is(EstadoReserva.CONFIRMADA)
+            .and("estado").in(EstadoReserva.CONFIRMADA, EstadoReserva.EN_ESTANCIA)
             .and("datos.fechaEntrada").lt(fechaSalida)
             .and("datos.fechaSalida").gt(fechaEntrada)), Reserva.class);
+    }
+
+    public Reserva registrarLlegada(Reserva reserva) {
+        var habitacion = Query.query(Criteria.where("_id").is(reserva.datos().habitacionId())
+            .and("eliminada").is(false).and("datos.estado").is(EstadoHabitacion.DISPONIBLE));
+        if (mongo.updateFirst(habitacion, new Update().set("datos.estado", EstadoHabitacion.OCUPADA), Habitacion.class)
+                .getMatchedCount() != 1) {
+            throw com.example.staycontrol.exception.ApiException.conflicto("HABITACION_NO_LISTA",
+                "La habitación debe estar disponible para registrar la llegada.");
+        }
+        return cambiarEstado(reserva, EstadoReserva.EN_ESTANCIA);
     }
 
     public Reserva cerrar(Reserva reserva, EstadoReserva estado) {
@@ -62,8 +73,12 @@ public class ReservaRepository {
         if (resultado.getMatchedCount() != 1) {
             throw new DataIntegrityViolationException("Contador de reservas inconsistente.");
         }
+        return cambiarEstado(reserva, estado);
+    }
+
+    private Reserva cambiarEstado(Reserva reserva, EstadoReserva estado) {
         var actualizada = mongo.findAndModify(Query.query(Criteria.where("_id").is(reserva.id())
-            .and("estado").is(EstadoReserva.CONFIRMADA)), new Update().set("estado", estado),
+            .and("estado").is(reserva.estado())), new Update().set("estado", estado),
             FindAndModifyOptions.options().returnNew(true), Reserva.class);
         if (actualizada == null) { throw new DataIntegrityViolationException("Cambio de estado concurrente."); }
         return actualizada;

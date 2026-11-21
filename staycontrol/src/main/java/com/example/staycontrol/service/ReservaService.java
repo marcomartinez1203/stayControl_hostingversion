@@ -4,6 +4,8 @@ import com.example.staycontrol.dto.*;
 import com.example.staycontrol.exception.ApiException;
 import com.example.staycontrol.model.*;
 import com.example.staycontrol.repository.ReservaRepository;
+import com.example.staycontrol.repository.LimpiezaRepository;
+import com.example.staycontrol.repository.FinanzasRepository;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.dao.DataAccessResourceFailureException;
 import org.springframework.dao.DuplicateKeyException;
@@ -23,13 +25,18 @@ public class ReservaService {
     private final IdempotencyService idempotencia;
     private final TransactionTemplate transacciones;
     private final ZoneId zona;
+    private final LimpiezaRepository limpieza;
+    private final FinanzasRepository finanzas;
 
     public ReservaService(ReservaRepository repository, IdempotencyService idempotencia,
-        MongoTransactionManager manager, @Value("${app.hotel.zone:America/Bogota}") String zona) {
+        MongoTransactionManager manager, @Value("${app.hotel.zone:America/Bogota}") String zona,
+        LimpiezaRepository limpieza, FinanzasRepository finanzas) {
         this.repository = repository;
         this.idempotencia = idempotencia;
         this.transacciones = new TransactionTemplate(manager);
         this.zona = ZoneId.of(zona);
+        this.limpieza = limpieza;
+        this.finanzas = finanzas;
     }
 
     public Creacion crear(String clave, ReservaRequest request) {
@@ -119,20 +126,75 @@ public class ReservaService {
 
     public ReservaResponse cambiarEstado(String id, EstadoReserva estado) {
         validarId(id);
-        if (estado != EstadoReserva.CANCELADA && estado != EstadoReserva.FINALIZADA) {
-            throw ApiException.invalida("El estado de destino debe ser CANCELADA o FINALIZADA.");
+        if (estado == null || estado == EstadoReserva.CONFIRMADA) {
+            throw ApiException.invalida("Indica una llegada, salida o cancelación.");
         }
+        if (estado == EstadoReserva.FINALIZADA) { limpieza.prepararIndices(); }
         return transacciones.execute(status -> {
             Reserva reserva = buscar(id);
             if (reserva.estado() == estado) { return respuesta(reserva); }
+            LocalDate hoy = LocalDate.now(zona);
+            if (reserva.estado() == EstadoReserva.EN_ESTANCIA) {
+                if (estado != EstadoReserva.FINALIZADA) {
+                    throw ApiException.conflicto("ESTANCIA_ACTIVA", "Registra la salida del huésped.");
+                }
+                limpieza.generarPorSalida(reserva.datos().habitacionId(),
+                    idempotencia.identificador("limpieza-salida", id), hoy.toString());
+                return respuesta(repository.cerrar(reserva, estado));
+            }
             if (reserva.estado() != EstadoReserva.CONFIRMADA) {
                 throw ApiException.conflicto("RESERVA_CERRADA", "Una reserva cerrada no puede cambiar de estado.");
             }
-            if (estado == EstadoReserva.FINALIZADA && LocalDate.parse(reserva.datos().fechaSalida()).isAfter(LocalDate.now(zona))) {
+            if (estado == EstadoReserva.EN_ESTANCIA) {
+                if (hoy.isBefore(LocalDate.parse(reserva.datos().fechaEntrada()))
+                    || !hoy.isBefore(LocalDate.parse(reserva.datos().fechaSalida()))) {
+                    throw ApiException.conflicto("FUERA_DE_ESTANCIA", "La llegada debe registrarse dentro de las fechas de estancia.");
+                }
+                return respuesta(repository.registrarLlegada(reserva));
+            }
+            if (estado == EstadoReserva.FINALIZADA && LocalDate.parse(reserva.datos().fechaSalida()).isAfter(hoy)) {
                 throw ApiException.conflicto("ESTANCIA_NO_TERMINADA", "No se puede finalizar antes de la fecha de salida.");
             }
             return respuesta(repository.cerrar(reserva, estado));
         });
+    }
+
+    public java.util.Optional<MovimientoResponse> obtenerPago(String id) {
+        buscar(id);
+        return finanzas.buscar(idempotencia.identificador("pago-estancia", id))
+            .map(movimiento -> MovimientoResponse.de(movimiento, false));
+    }
+
+    public MovimientoResponse confirmarPago(String id, MetodoPago metodo, String operador) {
+        validarId(id);
+        if (metodo == null) { throw ApiException.invalida("Selecciona el método de pago."); }
+        String movimientoId = idempotencia.identificador("pago-estancia", id);
+        finanzas.prepararIndices();
+        try {
+            return transacciones.execute(status -> {
+                var reserva = buscar(id);
+                var existente = finanzas.buscar(movimientoId);
+                if (existente.isPresent()) { return pagoExistente(existente.get(), metodo); }
+                if (reserva.estado() != EstadoReserva.EN_ESTANCIA && reserva.estado() != EstadoReserva.FINALIZADA) {
+                    throw ApiException.conflicto("ESTANCIA_NO_INICIADA", "Registra la llegada antes de confirmar el pago.");
+                }
+                var datos = new MovimientoRequest(TipoMovimiento.INGRESO, "Hospedaje de " + reserva.datos().huesped(),
+                    reserva.total(), "COP", LocalDate.now(zona), metodo).validarYNormalizar();
+                var movimiento = new MovimientoFinanciero(movimientoId, datos, EstadoMovimiento.REGISTRADO,
+                    operador, java.time.Instant.now().truncatedTo(ChronoUnit.MILLIS), null);
+                return MovimientoResponse.de(finanzas.insertar(movimiento), false);
+            });
+        } catch (DuplicateKeyException e) {
+            return finanzas.buscar(movimientoId).map(m -> pagoExistente(m, metodo))
+                .orElseThrow(() -> new DataAccessResourceFailureException("Reintenta confirmar el pago."));
+        }
+    }
+
+    private MovimientoResponse pagoExistente(MovimientoFinanciero movimiento, MetodoPago metodo) {
+        if (movimiento.estado() == EstadoMovimiento.ANULADO || movimiento.datos().metodoPago() != metodo) {
+            throw ApiException.conflicto("PAGO_EXISTENTE", "Consulta el movimiento de esta reserva en Finanzas.");
+        }
+        return MovimientoResponse.de(movimiento, false);
     }
 
     private Creacion repetir(Reserva reserva, DatosReserva datos) {

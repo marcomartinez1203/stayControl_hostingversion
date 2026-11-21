@@ -30,6 +30,18 @@ public class LimpiezaRepository {
     public Optional<TareaLimpieza> buscar(String id) { return Optional.ofNullable(mongo.findById(id, TareaLimpieza.class)); }
     public TareaLimpieza insertar(TareaLimpieza tarea) { return mongo.insert(tarea); }
 
+    public void generarPorSalida(String habitacionId, String tareaId, String fecha) {
+        var habitacion = Query.query(Criteria.where("_id").is(habitacionId)
+            .and("datos.estado").is(EstadoHabitacion.OCUPADA).and("eliminada").is(false));
+        var cambio = new Update().set("datos.estado", EstadoHabitacion.LIMPIEZA)
+            .set("limpiezaSalidaId", tareaId).inc("tareasLimpiezaActivas", 1);
+        if (mongo.updateFirst(habitacion, cambio, Habitacion.class).getMatchedCount() != 1) {
+            throw new DataIntegrityViolationException("La habitación de la estancia no está ocupada.");
+        }
+        insertar(new TareaLimpieza(tareaId, new DatosLimpieza(habitacionId,
+            "Limpieza tras la salida del huésped", "", fecha), EstadoLimpieza.PENDIENTE));
+    }
+
     public boolean vincularHabitacion(String id) {
         return mongo.updateFirst(Query.query(Criteria.where("_id").is(id).and("eliminada").is(false)),
             new Update().inc("tareasLimpiezaActivas", 1), Habitacion.class).getMatchedCount() == 1;
@@ -38,6 +50,16 @@ public class LimpiezaRepository {
     /** Debe ejecutarse en la misma transacción que la lectura del estado actual. */
     public TareaLimpieza actualizarEstado(TareaLimpieza actual, EstadoLimpieza estado) {
         if (estado.cerrada()) {
+            var limpiezaSalida = Query.query(Criteria.where("_id").is(actual.datos().habitacionId())
+                .and("limpiezaSalidaId").is(actual.id()));
+            if (estado == EstadoLimpieza.CANCELADA && mongo.exists(limpiezaSalida, Habitacion.class)) {
+                throw com.example.staycontrol.exception.ApiException.conflicto("LIMPIEZA_REQUERIDA",
+                    "Completa la limpieza de salida para liberar la habitación.");
+            }
+            if (estado == EstadoLimpieza.COMPLETADA) {
+                mongo.updateFirst(limpiezaSalida, new Update().unset("limpiezaSalidaId")
+                    .set("datos.estado", EstadoHabitacion.DISPONIBLE), Habitacion.class);
+            }
             var resultado = mongo.updateFirst(Query.query(Criteria.where("_id").is(actual.datos().habitacionId())
                 .and("tareasLimpiezaActivas").gt(0)), new Update().inc("tareasLimpiezaActivas", -1), Habitacion.class);
             if (resultado.getMatchedCount() != 1) {

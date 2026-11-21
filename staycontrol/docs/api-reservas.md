@@ -9,10 +9,12 @@ Base: `/api/v1/reservas`. Requiere sesión autenticada del hotel y CSRF para esc
 | GET | `/{id}` | Consulta individual; `404` si no existe |
 | GET | `/disponibilidad` | Disponibilidad orientativa y cotización de una habitación |
 | POST | `/` | Creación `201`; exige `Idempotency-Key` |
-| PUT | `/{id}/estado` | Cancelar o finalizar, `200` |
+| PUT | `/{id}/estado` | Registrar llegada, salida, cancelación o cierre histórico |
+| GET | `/{id}/pago` | Movimiento del pago o `204` si aún no se registró |
+| PUT | `/{id}/pago` | Confirmar el ingreso por el total de la estancia |
 | DELETE | `/{id}` | Cancelación lógica, `204`; nunca borra el historial |
 
-El listado admite `estado=CONFIRMADA`, `CANCELADA` o `FINALIZADA`, `habitacionId`, `fecha=AAAA-MM-DD`, `buscar`,
+El listado admite `estado=CONFIRMADA`, `EN_ESTANCIA`, `CANCELADA` o `FINALIZADA`, `habitacionId`, `fecha=AAAA-MM-DD`, `buscar`,
 `pagina` (0–10000) y `tamano` (1–100, por defecto 20). Se ordena por fecha de entrada
 e id. La página y su total son lecturas separadas, no una instantánea conjunta.
 
@@ -84,7 +86,7 @@ administrativo. Las fechas se almacenan como días civiles ISO, sin zona horaria
 
 La habitación debe existir, no estar eliminada ni en mantenimiento. Los intervalos
 son `[entrada, salida)`: una salida y una nueva entrada el mismo día son compatibles.
-Solo CONFIRMADA bloquea fechas. Una colisión devuelve `409 FECHAS_OCUPADAS`.
+CONFIRMADA y EN_ESTANCIA bloquean fechas. Una colisión devuelve `409 FECHAS_OCUPADAS`.
 
 El servidor fija `precioNoche` desde la habitación y calcula `total = precioNoche × noches`
 con BigDecimal/Decimal128. El cliente no elige importe ni estado inicial. Siempre
@@ -126,9 +128,13 @@ PUT `/{id}/estado`:
 { "estado": "CANCELADA" }
 ```
 
-También acepta FINALIZADA, solo a partir de la fecha de salida según
-`app.hotel.zone` (por defecto America/Bogota). Se permiten únicamente las transiciones
-CONFIRMADA → CANCELADA o CONFIRMADA → FINALIZADA. No se reabren reservas cerradas.
+Una reserva CONFIRMADA se puede cancelar. En las fechas de estancia, según
+`app.hotel.zone` (por defecto America/Bogota), EN_ESTANCIA registra la llegada
+si la habitación está DISPONIBLE y la marca OCUPADA. Desde EN_ESTANCIA, FINALIZADA
+registra la salida real, incluso anticipada. En una transacción se cierra la reserva,
+se marca la habitación en LIMPIEZA y se crea su tarea de salida. Completar esa tarea
+devuelve la habitación a DISPONIBLE. Una reserva confirmada histórica también se
+puede cerrar desde la fecha prevista de salida sin simular ocupación ni limpieza.
 Repetir el mismo estado devuelve el estado actual sin descontar el contador otra vez.
 Solicitar otro estado tras el cierre devuelve `409 RESERVA_CERRADA`.
 
@@ -138,13 +144,13 @@ actualizan estado y contador en una transacción; no requieren Idempotency-Key.
 
 Mientras una habitación tenga reservas CONFIRMADAS, su PUT y DELETE devuelven
 `409 HABITACION_CON_RESERVAS`. Esto también aplica a reservas históricas que aún
-no se hayan finalizado. No se cambia automáticamente el estado físico de la habitación
-(OCUPADA, LIMPIEZA, etc.). No edites manualmente `reservasActivas` ni borres reservas:
+no se hayan finalizado y a estancias en curso. No edites manualmente `reservasActivas` ni borres reservas:
 el contador forma parte de la integridad entre colecciones.
 
-Esta etapa no incluye reprogramación, cambio de huésped/habitación, check-in
-ni cobros. Para corregir una reserva, cancela y crea otra
-con una clave nueva. No es una operación conjunta de reprogramación.
+En una reserva EN_ESTANCIA o FINALIZADA, confirma el pago con PUT a
+`/{id}/pago` y un cuerpo como `{"metodoPago":"EFECTIVO"}`. Se registra un ingreso
+por el total pactado en COP con la fecha del hotel. Repetir el mismo pago devuelve
+el movimiento existente. Finanzas permite anularlo conservando el historial.
 
 ## Verificación
 

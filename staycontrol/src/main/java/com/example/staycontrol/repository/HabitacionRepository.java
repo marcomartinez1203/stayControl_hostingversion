@@ -76,9 +76,15 @@ public class HabitacionRepository {
     }
 
     public Optional<Habitacion> actualizar(String id, DatosHabitacion datos) {
-        var actualizada = mongo.findAndModify(sinReservas(id), new Update().set("datos", datos),
+        var editable = sinReservas(id).addCriteria(Criteria.where("limpiezaSalidaId").is(null));
+        var actualizada = mongo.findAndModify(editable, new Update().set("datos", datos),
             FindAndModifyOptions.options().returnNew(true), Habitacion.class);
-        if (actualizada == null) { comprobarReservas(id); }
+        if (actualizada == null) {
+            if (mongo.exists(Query.query(Criteria.where("_id").is(id).and("limpiezaSalidaId").ne(null)), Habitacion.class)) {
+                throw ApiException.conflicto("LIMPIEZA_REQUERIDA", "Completa la limpieza de salida antes de editar la habitación.");
+            }
+            comprobarReservas(id);
+        }
         return Optional.ofNullable(actualizada);
     }
 

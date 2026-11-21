@@ -8,8 +8,8 @@ import Icon from "../components/Icon.vue";
 import ReservationCalendar from "../components/ReservationCalendar.vue";
 const props = defineProps({ modulo: String });
 const route = useRoute(), router = useRouter();
-const estados = {habitaciones:['DISPONIBLE','OCUPADA','LIMPIEZA','MANTENIMIENTO'],reservas:['CONFIRMADA','CANCELADA','FINALIZADA'],limpieza:['PENDIENTE','EN_PROCESO','COMPLETADA','CANCELADA'],finanzas:['REGISTRADO','ANULADO']};
-const etiquetas = {DISPONIBLE:'Disponibles',OCUPADA:'Ocupadas',LIMPIEZA:'Limpieza',MANTENIMIENTO:'Mantenimiento',CONFIRMADA:'Confirmada',CANCELADA:'Cancelada',FINALIZADA:'Finalizada',PENDIENTE:'Pendiente',EN_PROCESO:'En proceso',COMPLETADA:'Completada',REGISTRADO:'Registrado',ANULADO:'Anulado'};
+const estados = {habitaciones:['DISPONIBLE','OCUPADA','LIMPIEZA','MANTENIMIENTO'],reservas:['CONFIRMADA','EN_ESTANCIA','CANCELADA','FINALIZADA'],limpieza:['PENDIENTE','EN_PROCESO','COMPLETADA','CANCELADA'],finanzas:['REGISTRADO','ANULADO']};
+const etiquetas = {DISPONIBLE:'Disponibles',OCUPADA:'Ocupadas',LIMPIEZA:'Limpieza',MANTENIMIENTO:'Mantenimiento',CONFIRMADA:'Confirmada',EN_ESTANCIA:'En estancia',CANCELADA:'Cancelada',FINALIZADA:'Finalizada',PENDIENTE:'Pendiente',EN_PROCESO:'En proceso',COMPLETADA:'Completada',REGISTRADO:'Registrado',ANULADO:'Anulado'};
 const filtros = reactive({estado:'',buscar:'',moneda:'COP',fecha:'',desde:'',hasta:'',tipo:'INGRESO'});
 const items = ref([]), total = ref(0), cargando = ref(false), ocupado = ref(false), mensaje = ref(''), resumen = ref(null), meses = ref([]), habitaciones = ref({});
 const lectura = useLectura();
@@ -78,6 +78,27 @@ async function anular() {
   finally{ocupado.value=false;}
 }
 function cerrarAnulacion(){if (!accion.motivo || window.confirm('¿Descartar el motivo escrito?')){accion.id='';accion.motivo='';borrador.guardado();}}
+const pagos = reactive({});
+const metodosPago = reactive({});
+async function consultarPago(id) {
+  try {
+    pagos[id] = await requestJson(`/api/v1/reservas/${id}/pago`);
+    metodosPago[id] ??= 'EFECTIVO';
+  } catch (e) { mensaje.value = errorTexto(e); }
+}
+async function confirmarPago(item) {
+  if (hayOperacion() || !window.confirm(`¿Confirmas que recibiste ${dinero(item.total, 'COP')} de ${item.huesped}?`)) return;
+  ocupado.value = true;
+  borrador.enviado();
+  try {
+    pagos[item.id] = await requestJson(`/api/v1/reservas/${item.id}/pago`, {
+      method: 'PUT', body: { metodoPago: metodosPago[item.id] }
+    });
+    borrador.guardado();
+    mensaje.value = 'Ingreso registrado en Finanzas.';
+  } catch (e) { mensaje.value = errorTexto(e); }
+  finally { ocupado.value = false; }
+}
 function exportar() {
   if (!resumen.value || cargando.value) return;
   const blob=new Blob([JSON.stringify({resumen:resumen.value,analisisMensual:meses.value},null,2)],{type:'application/json'});
@@ -115,7 +136,25 @@ const vencida = item => ['PENDIENTE','EN_PROCESO'].includes(item.estado) && item
     <template v-if="modulo==='finanzas'"><strong :class="item.tipo==='INGRESO'?'income':'expense'">{{ dinero(item.importe,item.moneda) }}</strong><p>{{ item.fecha }} · {{ item.metodoPago }}</p><p v-if="item.anulacion">Motivo: {{ item.anulacion.motivo }}</p></template>
     <details><summary>Detalles / acciones</summary><div class="vue-actions">
       <template v-if="modulo==='habitaciones'"><RouterLink class="vue-button" :to="`/habitaciones/editar/${item.id}`">Editar</RouterLink><button :disabled="ocupado" @click="ejecutar(item,'eliminar')">Eliminar</button><RouterLink class="vue-button" :to="{path:'/reservas/nuevo',query:{habitacionId:item.id}}">Crear reserva</RouterLink><RouterLink class="vue-button" :to="{path:'/limpieza/nuevo',query:{habitacionId:item.id}}">Programar limpieza</RouterLink><RouterLink class="vue-button secondary" :to="{path:'/reservas',query:{habitacionId:item.id}}">Ver reservas</RouterLink><RouterLink class="vue-button secondary" :to="{path:'/limpieza',query:{habitacionId:item.id}}">Ver limpieza</RouterLink></template>
-      <template v-if="modulo==='reservas' && item.estado==='CONFIRMADA'"><button :disabled="ocupado" @click="ejecutar(item,'eliminar')">Cancelar reserva</button><button :disabled="ocupado || item.fechaSalida>fechaLocal()" @click="ejecutar(item,'estado','FINALIZADA')">Finalizar estancia</button></template>
+      <template v-if="modulo==='reservas'">
+        <template v-if="item.estado==='CONFIRMADA'">
+          <button :disabled="ocupado" @click="ejecutar(item,'estado','EN_ESTANCIA')">Registrar llegada</button>
+          <button :disabled="ocupado" @click="ejecutar(item,'eliminar')">Cancelar reserva</button>
+          <button v-if="item.fechaSalida<=fechaLocal()" :disabled="ocupado" @click="ejecutar(item,'estado','FINALIZADA')">Cerrar reserva histórica</button>
+        </template>
+        <button v-if="item.estado==='EN_ESTANCIA'" :disabled="ocupado" @click="ejecutar(item,'estado','FINALIZADA')">Registrar salida</button>
+        <template v-if="['EN_ESTANCIA','FINALIZADA'].includes(item.estado)">
+          <button class="secondary" :disabled="ocupado" @click="consultarPago(item.id)">Consultar pago</button>
+          <form v-if="pagos[item.id] === null" class="vue-fields" @submit.prevent="confirmarPago(item)">
+            <label>Método de pago<select v-model="metodosPago[item.id]" :disabled="ocupado">
+              <option value="EFECTIVO">Efectivo</option><option value="TARJETA">Tarjeta</option>
+              <option value="TRANSFERENCIA">Transferencia</option><option value="OTRO">Otro</option>
+            </select></label>
+            <button :disabled="ocupado">Confirmar pago de {{ dinero(item.total, 'COP') }}</button>
+          </form>
+          <p v-else-if="pagos[item.id]">Pago {{ pagos[item.id].estado.toLowerCase() }} · {{ dinero(pagos[item.id].importe, pagos[item.id].moneda) }}</p>
+        </template>
+      </template>
       <template v-if="modulo==='limpieza' && ['PENDIENTE','EN_PROCESO'].includes(item.estado)"><button v-if="item.estado==='PENDIENTE'" :disabled="ocupado" @click="ejecutar(item,'estado','EN_PROCESO')">Iniciar</button><button :disabled="ocupado" @click="ejecutar(item,'estado','COMPLETADA')">Completar</button><button :disabled="ocupado" @click="ejecutar(item,'eliminar')">Cancelar tarea</button></template>
       <template v-if="modulo==='finanzas' && item.estado==='REGISTRADO'"><button :disabled="ocupado || Boolean(accion.id)" @click="accion.id=item.id">Anular movimiento</button><form v-if="accion.id===item.id" class="vue-fields" @submit.prevent="anular"><label>Motivo<textarea v-model="accion.motivo" required maxlength="300" :disabled="ocupado"></textarea></label><button :disabled="ocupado">Confirmar anulación</button><button type="button" class="secondary" :disabled="ocupado" @click="cerrarAnulacion">Volver</button><small>Esto registra una anulación; no realiza devoluciones bancarias.</small></form></template>
     </div></details>

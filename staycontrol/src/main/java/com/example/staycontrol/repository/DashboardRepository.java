@@ -38,8 +38,8 @@ public class DashboardRepository {
 
     public DashboardResponse.ReservasDia reservasDelDia(String fecha) {
         long entradas = mongo.count(Query.query(confirmadas().and("datos.fechaEntrada").is(fecha)), Reserva.class);
-        long salidas = mongo.count(Query.query(confirmadas().and("datos.fechaSalida").is(fecha)), Reserva.class);
-        long estancias = mongo.count(Query.query(confirmadas().and("datos.fechaEntrada").lte(fecha)
+        long salidas = mongo.count(Query.query(activas().and("datos.fechaSalida").is(fecha)), Reserva.class);
+        long estancias = mongo.count(Query.query(activas().and("datos.fechaEntrada").lte(fecha)
             .and("datos.fechaSalida").gt(fecha)), Reserva.class);
         return new DashboardResponse.ReservasDia(entradas, salidas, estancias);
     }
@@ -81,6 +81,7 @@ public class DashboardRepository {
         return estados;
     }
     private Criteria confirmadas() { return Criteria.where("estado").is(EstadoReserva.CONFIRMADA); }
+    private Criteria activas() { return Criteria.where("estado").in(EstadoReserva.CONFIRMADA, EstadoReserva.EN_ESTANCIA); }
     private Criteria tareasAbiertas(String fecha) {
         return Criteria.where("estado").in(EstadoLimpieza.PENDIENTE, EstadoLimpieza.EN_PROCESO)
             .and("datos.fechaProgramada").lte(fecha);
